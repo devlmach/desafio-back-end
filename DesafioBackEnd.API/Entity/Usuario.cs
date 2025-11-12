@@ -19,8 +19,8 @@ namespace DesafioBackEnd.API.Entity
         public string Senha { get; set; }
 
         [Required(ErrorMessage = "O tipo do usuário não pode ser nulo")]
-        [AllowedValues(UserType.COMUM, UserType.LOJISTA, ErrorMessage = "Valor inválido, cadastre como COMUM ou LOJISTA")]
-        public UserType Tipo { get; set; }
+        //[AllowedValues(UserType.COMUM, UserType.LOJISTA, ErrorMessage = "Valor inválido, cadastre como COMUM ou LOJISTA")]
+        public UserType? Tipo { get; set; }
 
         [Required]
         public decimal Carteira { get; set; }
