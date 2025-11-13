@@ -1,8 +1,9 @@
-﻿using DesafioBackEnd.API.Context;
+﻿using DesafioBackEnd.API.Domain.Context;
+using DesafioBackEnd.API.Domain.Repository.Interfaces;
 using DesafioBackEnd.API.Entity;
 using Microsoft.EntityFrameworkCore;
 
-namespace DesafioBackEnd.API.Repository
+namespace DesafioBackEnd.API.Domain.Repository
 {
     public class UsuarioRepository : IUsuarioRepository
     {

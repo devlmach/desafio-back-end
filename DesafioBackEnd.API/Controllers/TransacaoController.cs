@@ -1,5 +1,5 @@
-﻿using DesafioBackEnd.API.Entity;
-using DesafioBackEnd.API.Service;
+﻿using DesafioBackEnd.API.Domain.Service.Interfaces;
+using DesafioBackEnd.API.Entity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DesafioBackEnd.API.Controllers

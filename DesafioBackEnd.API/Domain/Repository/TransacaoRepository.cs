@@ -1,8 +1,9 @@
-﻿using DesafioBackEnd.API.Context;
+﻿using DesafioBackEnd.API.Domain.Context;
+using DesafioBackEnd.API.Domain.Repository.Interfaces;
+using DesafioBackEnd.API.Domain.Service.Interfaces;
 using DesafioBackEnd.API.Entity;
-using DesafioBackEnd.API.Service;
 
-namespace DesafioBackEnd.API.Repository
+namespace DesafioBackEnd.API.Domain.Repository
 {
     public class TransacaoRepository : ITransacaoRepository
     {
@@ -39,7 +40,6 @@ namespace DesafioBackEnd.API.Repository
             if (autorizacaoTrue.data.authorization == false)
                 throw new Exception("Transação negada.");
 
-
             Transacao newTransacao = new Transacao();
 
             newTransacao.QuantiaTransferida = transacao.QuantiaTransferida;
@@ -51,16 +51,7 @@ namespace DesafioBackEnd.API.Repository
 
             _dbContext.Transacoes.Add(newTransacao);
             _dbContext.Usuarios.Update(sender);
-            _dbContext.Usuarios.Update(receiver);
-
-            //var responsePost = await request.PostAsync("https://util.devi.tools/api/v1/notify", null);
-            //var auth = await responsePost.Content.ReadAsStringAsync();
-            //var authTrue = System.Text.Json.JsonSerializer.Deserialize<AuthorizationResponse>(auth);
-
-            //Console.WriteLine($"----------------------- {authTrue.status.ToString()} ------------------------");
-            //if (authTrue?.status == "fail")
-                //throw new Exception($"message: Route {response} not found");
- 
+            _dbContext.Usuarios.Update(receiver); 
                 
             await _dbContext.SaveChangesAsync();
             return newTransacao;

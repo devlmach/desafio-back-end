@@ -1,8 +1,8 @@
 ﻿using DesafioBackEnd.API.Entity;
 
-namespace DesafioBackEnd.API.Service
+namespace DesafioBackEnd.API.Domain.Repository.Interfaces
 {
-    public interface ITransacaoService
+    public interface ITransacaoRepository
     {
         Task<Transacao> CreateTransacaoAsync(Transacao transacao);
     }

@@ -1,7 +1,8 @@
-﻿using DesafioBackEnd.API.Entity;
-using DesafioBackEnd.API.Repository;
+﻿using DesafioBackEnd.API.Domain.Repository.Interfaces;
+using DesafioBackEnd.API.Domain.Service.Interfaces;
+using DesafioBackEnd.API.Entity;
 
-namespace DesafioBackEnd.API.Service
+namespace DesafioBackEnd.API.Domain.Service
 {
     public class TransacaoService : ITransacaoService
     {

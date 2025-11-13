@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace DesafioBackEnd.API.Context
+namespace DesafioBackEnd.API.Domain.Context
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

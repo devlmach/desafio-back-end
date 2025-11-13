@@ -1,6 +1,6 @@
 ﻿using DesafioBackEnd.API.Entity;
 
-namespace DesafioBackEnd.API.Repository
+namespace DesafioBackEnd.API.Domain.Repository.Interfaces
 {
     public interface IUsuarioRepository
     {
