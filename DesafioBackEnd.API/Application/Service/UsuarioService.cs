@@ -1,36 +1,68 @@
-﻿using DesafioBackEnd.API.Application.Service.Interfaces;
+﻿using AutoMapper;
+using DesafioBackEnd.API.Application.Command.Usuarios;
+using DesafioBackEnd.API.Application.Dto.Usuario;
+using DesafioBackEnd.API.Application.Dto.Usuarios;
+using DesafioBackEnd.API.Application.Command.Queries;
+using DesafioBackEnd.API.Application.Service.Interfaces;
 using DesafioBackEnd.API.Data.Repository.Interfaces;
 using DesafioBackEnd.API.Domain.Entity;
+using MediatR;
 
 namespace DesafioBackEnd.API.Application.Service
 {
     public class UsuarioService : IUsuarioService
     {
         private readonly IUsuarioRepository _usuarioRepository;
-        public UsuarioService(IUsuarioRepository usuarioRepository)
+        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
+
+        public UsuarioService(IUsuarioRepository usuarioRepository, IMapper mapper, IMediator mediator)
         {
             _usuarioRepository = usuarioRepository;
+            _mapper = mapper;
+            _mediator = mediator;
         }
 
-        public async Task AddAsync(Usuario usuario)
+        public async Task AddAsync(CreateUsuarioDto createUsuarioDto)
         {
-            await _usuarioRepository.AddAsync(usuario);
+            var usuarioCreateCommand = _mapper.Map<CreateUsuarioDto, UsuarioCreateCommand>(createUsuarioDto);
+            await _mediator.Send(usuarioCreateCommand);
         }
 
-        public async Task DeleteAsync(int? id)
+        public async Task DeleteAsync(long? id)
         {
-            var usuarioById = _usuarioRepository.GetByIdAsync(id).Result;
-            await _usuarioRepository.DeleteAsync(usuarioById);
+            var productDeleteCommand = new UsuarioDeleteCommand(id.Value);
+            if (productDeleteCommand == null)
+                throw new Exception($"Entity could not be found");
 
+            await _mediator.Send(productDeleteCommand);
         }
 
-        public async Task<Usuario> GetByIdAsync(int? id) => await _usuarioRepository.GetByIdAsync(id);
-
-        public async Task<IEnumerable<Usuario>> GetUsuariosAsync() => await _usuarioRepository.GetUsuariosAsync();
-
-        public async Task UpdateAsync(Usuario usuario)
+        public async Task<DetailUsuarioDto> GetByIdAsync(long? id)
         {
-            await _usuarioRepository.UpdateAsync(usuario);
+            var usuario = new GetUsuarioByIdQuery(id.Value);
+            if (usuario == null)
+                throw new Exception($"Entity could not be found");
+
+            var result = await _mediator.Send(usuario);
+            return _mapper.Map<DetailUsuarioDto>(result);
+        }
+            
+
+        public async Task<IEnumerable<DetailUsuarioDto>> GetUsuariosAsync()
+        {
+            var usuariosQuery = new GetUsuariosQuery();
+            if (usuariosQuery == null)
+                throw new Exception($"Entities could not be loaded");
+
+            var result = await _mediator.Send(usuariosQuery);
+            return _mapper.Map<IEnumerable<DetailUsuarioDto>>(result);
+        }
+
+        public async Task UpdateAsync(UpdateUsuarioDto updateUsuarioDto)
+        {
+            var usuarioUpdateCommand = _mapper.Map<UpdateUsuarioDto, UsuarioUpdateCommand>(updateUsuarioDto);
+            await _mediator.Send(usuarioUpdateCommand);
         }
     }
 }

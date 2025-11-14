@@ -1,4 +1,5 @@
-﻿using DesafioBackEnd.API.Data.Context;
+﻿using DesafioBackEnd.API.Application.Dto.Usuarios;
+using DesafioBackEnd.API.Data.Context;
 using DesafioBackEnd.API.Data.Repository.Interfaces;
 using DesafioBackEnd.API.Domain.Entity;
 using Microsoft.EntityFrameworkCore;
@@ -42,7 +43,10 @@ namespace DesafioBackEnd.API.Data.Repository
             return usuario;
         }
 
-        public async Task<Usuario> GetByIdAsync(long? id) => await _dbContext.Usuarios.FindAsync(id);
+        public async Task<Usuario> GetByIdAsync(long? id)
+        {
+            return await _dbContext.Usuarios.FindAsync(id);
+        }
         
         public async Task<IEnumerable<Usuario>> GetUsuariosAsync() => await _dbContext.Usuarios.ToListAsync();
 

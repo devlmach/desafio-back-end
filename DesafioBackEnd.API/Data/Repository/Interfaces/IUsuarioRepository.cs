@@ -1,4 +1,5 @@
-﻿using DesafioBackEnd.API.Domain.Entity;
+﻿using DesafioBackEnd.API.Application.Dto.Usuarios;
+using DesafioBackEnd.API.Domain.Entity;
 
 namespace DesafioBackEnd.API.Data.Repository.Interfaces
 {

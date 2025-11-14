@@ -1,13 +1,15 @@
-﻿using DesafioBackEnd.API.Domain.Entity;
+﻿using DesafioBackEnd.API.Application.Dto.Usuario;
+using DesafioBackEnd.API.Application.Dto.Usuarios;
+using DesafioBackEnd.API.Domain.Entity;
 
 namespace DesafioBackEnd.API.Application.Service.Interfaces
 {
     public interface IUsuarioService
     {
-        Task<IEnumerable<Usuario>> GetUsuariosAsync();
-        Task<Usuario> GetByIdAsync(int? id);
-        Task AddAsync(Usuario usuario);
-        Task UpdateAsync(Usuario usuario);
-        Task DeleteAsync(int? id);
+        Task<IEnumerable<DetailUsuarioDto>> GetUsuariosAsync();
+        Task<DetailUsuarioDto> GetByIdAsync(long? id);
+        Task AddAsync(CreateUsuarioDto createUsuarioDto);
+        Task UpdateAsync(UpdateUsuarioDto updateUsuarioDto);
+        Task DeleteAsync(long? id);
     }
 }
