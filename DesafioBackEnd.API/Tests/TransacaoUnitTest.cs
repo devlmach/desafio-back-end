@@ -1,4 +1,5 @@
-﻿using DesafioBackEnd.API.Entity;
+﻿using DesafioBackEnd.API.Domain.Entity;
+using DesafioBackEnd.API.Entity;
 using FluentAssertions;
 using System;
 using System.ComponentModel.DataAnnotations;

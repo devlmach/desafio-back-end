@@ -1,5 +1,5 @@
-﻿using DesafioBackEnd.API.Domain.Service.Interfaces;
-using DesafioBackEnd.API.Entity;
+﻿using DesafioBackEnd.API.Application.Service.Interfaces;
+using DesafioBackEnd.API.Domain.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

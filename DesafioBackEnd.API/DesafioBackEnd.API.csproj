@@ -37,7 +37,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dto\" />
+    <Folder Include="Application\Dto\Transferencia\" />
+    <Folder Include="Integrations\" />
   </ItemGroup>
 
 </Project>

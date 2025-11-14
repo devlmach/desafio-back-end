@@ -1,4 +1,4 @@
-using DesafioBackEnd.API.Domain.Context;
+using DesafioBackEnd.API.IoC;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
