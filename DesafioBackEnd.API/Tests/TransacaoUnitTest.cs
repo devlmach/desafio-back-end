@@ -1,6 +1,6 @@
 ﻿using DesafioBackEnd.API.Domain.Entity;
-using DesafioBackEnd.API.Entity;
 using FluentAssertions;
+using DesafioBackEnd.API.Domain.Entity;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.ConstrainedExecution;

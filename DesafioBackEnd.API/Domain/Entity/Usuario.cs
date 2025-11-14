@@ -37,5 +37,33 @@ namespace DesafioBackEnd.API.Domain.Entity
             UpdatedAt = updatedAt;
             IsActive = isActive;
         }
+
+        public Usuario(string nomeCompleto, string cpf, string email, string senha, UserType tipo, decimal carteira, DateTime createdAt, DateTime updatedAt, bool isActive)
+        {
+            NomeCompleto = nomeCompleto;
+            Cpf = cpf;
+            Email = email;
+            Senha = senha;
+            Tipo = tipo;
+            Carteira = carteira;
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+            IsActive = isActive;
+        }
+
+        public void Update(string nome, string cpf, string email, string senha,
+            UserType tipo, decimal carteira, DateTime createdAt, DateTime updatedAt,
+            bool isActive)
+        {
+            NomeCompleto = nome;
+            Cpf = cpf;
+            Email = email;
+            Senha = senha;
+            Tipo = tipo;
+            Carteira = carteira;
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+            IsActive = isActive;
+        }
     }
 }
