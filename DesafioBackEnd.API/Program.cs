@@ -1,4 +1,5 @@
 using DesafioBackEnd.API.Application.Mapping;
+using DesafioBackEnd.API.Common.Middleware;
 using DesafioBackEnd.API.IoC;
 using System.Text.Json.Serialization;
 
@@ -33,6 +34,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionsMiddeware>();
 
 app.UseHttpsRedirection();
 

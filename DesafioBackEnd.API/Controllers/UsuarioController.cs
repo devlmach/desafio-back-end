@@ -2,6 +2,7 @@
 using DesafioBackEnd.API.Application.Dto.Usuarios;
 using DesafioBackEnd.API.Application.Service.Interfaces;
 using DesafioBackEnd.API.Domain.Entity;
+using DesafioBackEnd.API.Domain.Errors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DesafioBackEnd.API.Controllers
@@ -44,7 +45,7 @@ namespace DesafioBackEnd.API.Controllers
         {
             var usuario = await _usuarioService.GetByIdAsync(id);
             if (usuario == null)
-                return NotFound($"Usuario com id {id} não encontrado!");
+                throw new NotFoundException("User not found.");
 
             return Ok(usuario);
         }
