@@ -31,13 +31,15 @@ namespace DesafioBackEnd.API.Common.Middleware
                     BadRequestException => (int)HttpStatusCode.BadRequest,
                     NotFoundException => (int)HttpStatusCode.NotFound,
                     DomainExceptions => (int)HttpStatusCode.BadRequest,
+
+                    _ => StatusCodes.Status500InternalServerError
                 };
 
                 context.Response.StatusCode = statusCode;
 
                 var response = new
                 {
-                    statusCode = statusCode,
+                    statusCode,
                     message = ex.Message
                 };
 
