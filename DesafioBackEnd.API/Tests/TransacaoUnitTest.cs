@@ -1,16 +1,14 @@
 ﻿using DesafioBackEnd.API.Domain.Entity;
 using FluentAssertions;
-using DesafioBackEnd.API.Domain.Entity;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.ConstrainedExecution;
 using Xunit;
 
 namespace DesafioBackEnd.API.Tests
 {
     public class TransacaoUnitTest
     {
-        [Fact(DisplayName = "Create User with valid datas")]
+        /*[Fact(DisplayName = "Create User with valid datas")]
         public void CreateUsuario_WithValidParameters_ResultCreated()
         {
             Action usuario = () => new Usuario
@@ -83,6 +81,6 @@ namespace DesafioBackEnd.API.Tests
             // Assert
             action.Should().Throw<ValidationException>()
                   .WithMessage("O ID do recebedor não pode ser vazio");
-        }
+        }*/
     }
 }

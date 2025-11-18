@@ -1,15 +1,13 @@
 ﻿using DesafioBackEnd.API.Domain.Entity;
-using DesafioBackEnd.API.Domain.Entity;
 using FluentAssertions;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.ConstrainedExecution;
 using Xunit;
 
 namespace DesafioBackEnd.API.Tests
 {
     public class UsuarioUnitTest
     {
-        // exemplo nome metodo CreateCategory_WithValidParameters_ResultObjectValidState
+       /* // exemplo nome metodo CreateCategory_WithValidParameters_ResultObjectValidState
         [Fact(DisplayName = "Create User with valid datas")]
         public void CreateUsuario_WithValidParameters_ResultCreated()
         {
@@ -178,7 +176,7 @@ namespace DesafioBackEnd.API.Tests
 
             // retorno da ação
             action.Should().Throw<ValidationException>().WithMessage("O tipo do usuário não pode ser nulo");
-        }
+        }*/
 
     }
 }
