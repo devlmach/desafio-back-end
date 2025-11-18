@@ -1,6 +1,7 @@
 ﻿using DesafioBackEnd.API.Application.Command.Usuarios;
 using DesafioBackEnd.API.Data.Repository.Interfaces;
 using DesafioBackEnd.API.Domain.Entity;
+using DesafioBackEnd.API.Domain.Errors;
 using MediatR;
 
 namespace DesafioBackEnd.API.Application.Command.Handler.Usuarios
@@ -19,7 +20,7 @@ namespace DesafioBackEnd.API.Application.Command.Handler.Usuarios
             var usuario = await _usuarioRepository.GetByIdAsync(request.Id);
             if (usuario == null)
             {
-                throw new ApplicationException($"Error could not be found");
+                throw new NotFoundException($"Error could not be found");
             }
             else
             {
