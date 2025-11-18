@@ -1,11 +1,9 @@
 ﻿using DesafioBackEnd.API.Domain.Entity;
-using System.ComponentModel.DataAnnotations;
 
 namespace DesafioBackEnd.API.Application.Dto.Usuarios
 {
     public class DetailUsuarioDto
     {
-        //[Key]
         public long Id { get; set; }
 
         public required string NomeCompleto { get; set; }

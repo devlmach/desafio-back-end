@@ -1,5 +1,4 @@
-﻿using DesafioBackEnd.API.Application.Dto.Usuarios;
-using DesafioBackEnd.API.Data.Context;
+﻿using DesafioBackEnd.API.Data.Context;
 using DesafioBackEnd.API.Data.Repository.Interfaces;
 using DesafioBackEnd.API.Domain.Entity;
 using DesafioBackEnd.API.Domain.Errors;
