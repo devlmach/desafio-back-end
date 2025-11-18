@@ -1,30 +1,29 @@
 ﻿using AutoMapper;
 using DesafioBackEnd.API.Application.Command.Usuarios;
-using DesafioBackEnd.API.Application.Dto.Usuario;
 using DesafioBackEnd.API.Application.Dto.Usuarios;
 using DesafioBackEnd.API.Application.Command.Queries;
 using DesafioBackEnd.API.Application.Service.Interfaces;
-using DesafioBackEnd.API.Data.Repository.Interfaces;
-using DesafioBackEnd.API.Domain.Entity;
 using MediatR;
+using DesafioBackEnd.API.Domain.Errors;
 
 namespace DesafioBackEnd.API.Application.Service
 {
     public class UsuarioService : IUsuarioService
     {
-        private readonly IUsuarioRepository _usuarioRepository;
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
 
-        public UsuarioService(IUsuarioRepository usuarioRepository, IMapper mapper, IMediator mediator)
+        public UsuarioService(IMapper mapper, IMediator mediator)
         {
-            _usuarioRepository = usuarioRepository;
             _mapper = mapper;
             _mediator = mediator;
         }
 
         public async Task AddAsync(CreateUsuarioDto createUsuarioDto)
         {
+            if (createUsuarioDto.NomeCompleto == null)
+                throw new BadRequestException("TESTE");
+
             var usuarioCreateCommand = _mapper.Map<CreateUsuarioDto, UsuarioCreateCommand>(createUsuarioDto);
             await _mediator.Send(usuarioCreateCommand);
         }

@@ -1,5 +1,4 @@
-﻿using DesafioBackEnd.API.Application.Dto.Usuario;
-using DesafioBackEnd.API.Application.Dto.Usuarios;
+﻿using DesafioBackEnd.API.Application.Dto.Usuarios;
 using DesafioBackEnd.API.Domain.Entity;
 
 namespace DesafioBackEnd.API.Application.Service.Interfaces
