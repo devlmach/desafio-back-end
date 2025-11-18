@@ -2,6 +2,7 @@
 using DesafioBackEnd.API.Data.Context;
 using DesafioBackEnd.API.Data.Repository.Interfaces;
 using DesafioBackEnd.API.Domain.Entity;
+using DesafioBackEnd.API.Domain.Errors;
 using Microsoft.EntityFrameworkCore;
 
 namespace DesafioBackEnd.API.Data.Repository
@@ -27,10 +28,10 @@ namespace DesafioBackEnd.API.Data.Repository
                 var errorMessage = ex.InnerException?.Message ?? "";
 
                 if (errorMessage.Contains("Cpf"))
-                    throw new Exception("Erro: Cpf já está em uso.");
+                    throw new BadRequestException("Erro: Cpf já está em uso.");
 
                 if(errorMessage.Contains("Email"))
-                    throw new Exception("Email já está em uso.");
+                    throw new BadRequestException("Email já está em uso.");
 
                 throw;
             }
