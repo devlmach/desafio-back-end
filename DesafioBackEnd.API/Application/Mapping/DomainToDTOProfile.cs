@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DesafioBackEnd.API.Application.Command.Usuarios;
-using DesafioBackEnd.API.Application.Dto.Usuario;
 using DesafioBackEnd.API.Application.Dto.Usuarios;
 using DesafioBackEnd.API.Domain.Entity;
 
