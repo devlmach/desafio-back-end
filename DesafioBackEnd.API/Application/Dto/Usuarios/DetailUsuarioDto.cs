@@ -5,7 +5,7 @@ namespace DesafioBackEnd.API.Application.Dto.Usuarios
 {
     public class DetailUsuarioDto
     {
-        [Key]
+        //[Key]
         public long Id { get; set; }
 
         public required string NomeCompleto { get; set; }

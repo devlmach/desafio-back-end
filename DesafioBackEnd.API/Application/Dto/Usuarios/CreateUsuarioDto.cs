@@ -1,7 +1,7 @@
 ﻿using DesafioBackEnd.API.Domain.Entity;
 using System.ComponentModel.DataAnnotations;
 
-namespace DesafioBackEnd.API.Application.Dto.Usuario
+namespace DesafioBackEnd.API.Application.Dto.Usuarios
 {
     public class CreateUsuarioDto
     {
