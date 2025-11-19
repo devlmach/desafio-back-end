@@ -37,10 +37,10 @@ namespace DesafioBackEnd.API.Common.Middleware
 
                 context.Response.StatusCode = statusCode;
 
-                var response = new
+                var response = new ErrorResponse
                 {
-                    statusCode,
-                    message = ex.Message
+                    StatusCode = statusCode,
+                    Message = ex.Message
                 };
 
                 var options = new JsonSerializerOptions
@@ -51,5 +51,18 @@ namespace DesafioBackEnd.API.Common.Middleware
                 await context.Response.WriteAsync(JsonSerializer.Serialize(response, options));
             }
         }
+    }
+
+    public class ErrorResponse
+    {
+        public int StatusCode { get; set; }
+        public required string Message { get; set; }
+        public IEnumerable<ErrorDetailResponse>? Details { get; set; }
+    }
+
+    public class ErrorDetailResponse
+    {
+        public required string Field { get; set; }
+        public string? Message { get; set; }
     }
 }
