@@ -21,9 +21,6 @@ namespace DesafioBackEnd.API.Application.Service
 
         public async Task AddAsync(CreateUsuarioDto createUsuarioDto)
         {
-            if (createUsuarioDto.NomeCompleto == null)
-                throw new BadRequestException("TESTE");
-
             var usuarioCreateCommand = _mapper.Map<CreateUsuarioDto, UsuarioCreateCommand>(createUsuarioDto);
             await _mediator.Send(usuarioCreateCommand);
         }
