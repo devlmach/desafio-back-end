@@ -1,10 +1,11 @@
 ﻿using DesafioBackEnd.API.Application.Dto.Usuarios;
+using DesafioBackEnd.API.Domain.Entity;
 
 namespace DesafioBackEnd.API.Application.Service.Interfaces
 {
     public interface IUsuarioService
     {
-        Task<IEnumerable<DetailUsuarioDto>> GetUsuariosAsync();
+        Task<IEnumerable<DetailUsuarioDto>> GetUsuariosAsync(string? nomeCompleto, string? cpf, string? email, UserType? tipo, bool? isActive);
         Task<DetailUsuarioDto> GetByIdAsync(long? id);
         Task AddAsync(CreateUsuarioDto createUsuarioDto);
         Task UpdateAsync(UpdateUsuarioDto updateUsuarioDto);

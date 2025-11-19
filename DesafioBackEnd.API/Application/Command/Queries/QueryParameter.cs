@@ -1,10 +1,8 @@
-﻿using DesafioBackEnd.API.Application.Dto.Usuarios;
-using DesafioBackEnd.API.Domain.Entity;
-using MediatR;
+﻿using DesafioBackEnd.API.Domain.Entity;
 
 namespace DesafioBackEnd.API.Application.Command.Queries
 {
-    public class GetUsuariosQuery : IRequest<IEnumerable<DetailUsuarioDto>>
+    public class QueryParameter
     {
         public string? NomeCompleto { get; set; }
         public string? Cpf { get; set; }

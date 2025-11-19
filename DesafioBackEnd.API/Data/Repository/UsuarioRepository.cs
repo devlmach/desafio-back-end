@@ -1,4 +1,5 @@
-﻿using DesafioBackEnd.API.Data.Context;
+﻿using DesafioBackEnd.API.Application.Dto.Usuarios;
+using DesafioBackEnd.API.Data.Context;
 using DesafioBackEnd.API.Data.Repository.Interfaces;
 using DesafioBackEnd.API.Domain.Entity;
 using DesafioBackEnd.API.Domain.Errors;
@@ -48,7 +49,40 @@ namespace DesafioBackEnd.API.Data.Repository
             return await _dbContext.Usuarios.FindAsync(id);
         }
         
-        public async Task<IEnumerable<Usuario>> GetUsuariosAsync() => await _dbContext.Usuarios.ToListAsync();
+        public async Task<IEnumerable<DetailUsuarioDto>> GetUsuariosAsync(string? nomeCompleto, string? cpf, string? email, UserType? tipo, bool? isActive)
+        {
+            var query = _dbContext.Usuarios.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(nomeCompleto))
+                query = query.Where(u => u.NomeCompleto.Contains(nomeCompleto));
+
+            if (!string.IsNullOrWhiteSpace(cpf))
+                query = query.Where(u => u.Cpf.Contains(cpf));
+
+            if (!string.IsNullOrWhiteSpace(email))
+                query = query.Where(u => u.Email.Contains(email));
+
+            if (tipo.HasValue)
+                query = query.Where(u => u.Tipo == tipo.Value);
+
+            if (isActive.HasValue)
+                query = query.Where(u => u.IsActive == isActive.Value);
+
+            return await query.Select(
+                u => new DetailUsuarioDto
+                {
+                    Id = u.Id,
+                    NomeCompleto = u.NomeCompleto,
+                    Cpf = u.Cpf,
+                    Email = u.Email,
+                    Senha = u.Senha,
+                    Tipo = u.Tipo,
+                    Carteira = u.Carteira,
+                    CreatedAt = u.CreatedAt,
+                    UpdatedAt = u.UpdatedAt,
+                    IsActive = u.IsActive,
+                }).ToListAsync();
+        }
 
         public async Task<Usuario> UpdateAsync(Usuario usuario)
         {

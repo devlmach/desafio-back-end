@@ -14,7 +14,7 @@ namespace DesafioBackEnd.API.Application.Dto.Usuarios
 
         public string? Senha { get; set; }
 
-        public required UserType Tipo { get; set; }
+        public UserType? Tipo { get; set; }
 
         public decimal Carteira { get; set; }
 

@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using DesafioBackEnd.API.Application.Command.Queries;
 using DesafioBackEnd.API.Application.Command.Usuarios;
 using DesafioBackEnd.API.Application.Dto.Usuarios;
-using DesafioBackEnd.API.Application.Command.Queries;
 using DesafioBackEnd.API.Application.Service.Interfaces;
+using DesafioBackEnd.API.Domain.Entity;
 using MediatR;
-using DesafioBackEnd.API.Domain.Errors;
 
 namespace DesafioBackEnd.API.Application.Service
 {
@@ -45,9 +45,17 @@ namespace DesafioBackEnd.API.Application.Service
         }
             
 
-        public async Task<IEnumerable<DetailUsuarioDto>> GetUsuariosAsync()
+        public async Task<IEnumerable<DetailUsuarioDto>> GetUsuariosAsync(string? nomeCompleto, string? cpf, string? email, UserType? tipo, bool? isActive)
         {
-            var usuariosQuery = new GetUsuariosQuery();
+            var usuariosQuery = new GetUsuariosQuery
+            {
+                NomeCompleto = nomeCompleto,
+                Cpf = cpf,
+                Email = email,
+                Tipo = tipo,
+                IsActive = isActive
+
+            };
             if (usuariosQuery == null)
                 throw new Exception($"Entities could not be loaded");
 

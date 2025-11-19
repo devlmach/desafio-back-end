@@ -1,8 +1,10 @@
-﻿using DesafioBackEnd.API.Application.Dto.Usuarios;
+﻿using DesafioBackEnd.API.Application.Command.Queries;
+using DesafioBackEnd.API.Application.Dto.Usuarios;
 using DesafioBackEnd.API.Application.Service.Interfaces;
 using DesafioBackEnd.API.Common.Middleware;
 using DesafioBackEnd.API.Domain.Entity;
 using DesafioBackEnd.API.Domain.Errors;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DesafioBackEnd.API.Controllers
@@ -55,16 +57,12 @@ namespace DesafioBackEnd.API.Controllers
         /// <summary>
         /// Endpoint para retornar uma lista de usuários
         /// </summary>
-        /// <param name="tipo"></param>
-        /// <param name="isActive"></param>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(DetailUsuarioDto), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<DetailUsuarioDto>>> GetAllUsuarios(
-            [FromQuery] bool? isActive, 
-            [FromQuery] UserType? tipo)
+        public async Task<ActionResult<IEnumerable<DetailUsuarioDto>>> GetAllUsuarios([FromQuery] QueryParameter queryParameter)
         {
-            var usuarios = await _usuarioService.GetUsuariosAsync();
+            var usuarios = await _usuarioService.GetUsuariosAsync(queryParameter.NomeCompleto, queryParameter.Cpf, queryParameter.Email, queryParameter.Tipo, queryParameter.IsActive);
             return Ok(usuarios);
         }
 
@@ -107,5 +105,6 @@ namespace DesafioBackEnd.API.Controllers
             await _usuarioService.DeleteAsync(id);
             return Ok(usuario);
         }
+
     }
 }

@@ -1,11 +1,12 @@
 ﻿using DesafioBackEnd.API.Application.Command.Queries;
+using DesafioBackEnd.API.Application.Dto.Usuarios;
 using DesafioBackEnd.API.Data.Repository.Interfaces;
 using DesafioBackEnd.API.Domain.Entity;
 using MediatR;
 
 namespace DesafioBackEnd.API.Application.Command.Handler.Usuarios
 {
-    public class GetUsuariosQueryHandler : IRequestHandler<GetUsuariosQuery, IEnumerable<Usuario>>
+    public class GetUsuariosQueryHandler : IRequestHandler<GetUsuariosQuery, IEnumerable<DetailUsuarioDto>>
     {
         private readonly IUsuarioRepository _usuarioRepository;
         public GetUsuariosQueryHandler(IUsuarioRepository usuarioRepository)
@@ -13,9 +14,9 @@ namespace DesafioBackEnd.API.Application.Command.Handler.Usuarios
             _usuarioRepository = usuarioRepository ?? throw new ArgumentNullException(nameof(usuarioRepository));
         }
 
-        public async Task<IEnumerable<Usuario>> Handle(GetUsuariosQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<DetailUsuarioDto>> Handle(GetUsuariosQuery request, CancellationToken cancellationToken)
         {
-            return await _usuarioRepository.GetUsuariosAsync();
+            return await _usuarioRepository.GetUsuariosAsync(request.NomeCompleto, request.Cpf, request.Email, request.Tipo, request.IsActive);
         }
     }
 }
