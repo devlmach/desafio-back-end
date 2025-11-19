@@ -1,13 +1,36 @@
 using DesafioBackEnd.API.Application.Mapping;
 using DesafioBackEnd.API.Common.Middleware;
 using DesafioBackEnd.API.IoC;
+using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(opt =>
+    {
+        opt.InvalidModelStateResponseFactory = (ctx) =>
+        {
+            var errors = ctx.ModelState
+                .Where(e => e.Value?.Errors.Count > 0)
+                .Select(e => new ErrorDetailResponse
+                {
+                    Field = e.Key,
+                    Message = e.Value?.Errors.First().ErrorMessage
+                });
+
+            var customResponse = new ErrorResponse
+            {
+                Message = "A requisição não respeita a semântica do objeto.",
+                StatusCode = StatusCodes.Status400BadRequest,
+                Details = errors
+            };
+
+            return new BadRequestObjectResult(customResponse);
+        };
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
