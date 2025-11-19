@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DesafioBackEnd.API.Application.Command.Usuarios;
+using DesafioBackEnd.API.Application.Dto.Transacao;
 using DesafioBackEnd.API.Application.Dto.Usuarios;
 using DesafioBackEnd.API.Domain.Entity;
 
@@ -13,6 +14,8 @@ namespace DesafioBackEnd.API.Application.Mapping
             CreateMap<CreateUsuarioDto, UsuarioCreateCommand>().ReverseMap();
             CreateMap<Usuario, DetailUsuarioDto>().ReverseMap();
             CreateMap<UpdateUsuarioDto, UsuarioUpdateCommand>().ReverseMap();
+
+            CreateMap<Transacao, CreateTransacaoDto>().ReverseMap();
         }
     }
 }
