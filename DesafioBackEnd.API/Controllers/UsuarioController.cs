@@ -1,5 +1,7 @@
 ﻿using DesafioBackEnd.API.Application.Dto.Usuarios;
 using DesafioBackEnd.API.Application.Service.Interfaces;
+using DesafioBackEnd.API.Common.Middleware;
+using DesafioBackEnd.API.Domain.Entity;
 using DesafioBackEnd.API.Domain.Errors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +23,9 @@ namespace DesafioBackEnd.API.Controllers
         /// <param name="usuario"></param>
         /// <returns></returns>
         [HttpPost]
+        [ProducesResponseType(typeof(DetailUsuarioDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<CreateUsuarioDto>> CreateUsuario([FromBody] CreateUsuarioDto usuario)
         {
             if (usuario == null)
@@ -36,6 +41,8 @@ namespace DesafioBackEnd.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(DetailUsuarioDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<DetailUsuarioDto>> GetUsuarioById(int? id)
         {
             var usuario = await _usuarioService.GetByIdAsync(id);
@@ -48,10 +55,14 @@ namespace DesafioBackEnd.API.Controllers
         /// <summary>
         /// Endpoint para retornar uma lista de usuários
         /// </summary>
+        /// <param name="tipo"></param>
+        /// <param name="isActive"></param>
         /// <returns></returns>
-        /// <response code="200"> lista Obtida. </response>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DetailUsuarioDto>>> GetAllUsuarios()
+        [ProducesResponseType(typeof(DetailUsuarioDto), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<DetailUsuarioDto>>> GetAllUsuarios(
+            [FromQuery] bool? isActive, 
+            [FromQuery] UserType? tipo)
         {
             var usuarios = await _usuarioService.GetUsuariosAsync();
             return Ok(usuarios);
@@ -64,6 +75,8 @@ namespace DesafioBackEnd.API.Controllers
         /// <param name="updateUsuarioDto"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(UpdateUsuarioDto), StatusCodes.Status202Accepted)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> UpdateUsuario(int? id, [FromBody] UpdateUsuarioDto updateUsuarioDto)
         {
             if (id != updateUsuarioDto.Id)
@@ -82,6 +95,8 @@ namespace DesafioBackEnd.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(DetailUsuarioDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<DetailUsuarioDto>> DeleteUsuario(long? id)
         {
             var usuario = await _usuarioService.GetByIdAsync(id);
