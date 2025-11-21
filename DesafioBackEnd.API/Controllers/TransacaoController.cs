@@ -1,4 +1,5 @@
 ﻿using DesafioBackEnd.API.Application.Dto.Transacao;
+using DesafioBackEnd.API.Application.Dto.Usuarios;
 using DesafioBackEnd.API.Application.Service.Interfaces;
 using DesafioBackEnd.API.Domain.Entity;
 using DesafioBackEnd.API.Domain.Errors;
@@ -46,6 +47,14 @@ namespace DesafioBackEnd.API.Controllers
                 throw new NotFoundException($"Transaction with id {id} not found");
 
             return Ok(transacao);
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<DetailTransacaoDto>>> GetAllTransacoes()
+        {
+            var transacoes = await _transacaoService.GetTransacoesAsync();
+            return Ok(transacoes);
         }
     }
 }

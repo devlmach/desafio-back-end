@@ -1,4 +1,5 @@
-﻿using DesafioBackEnd.API.Domain.Entity;
+﻿using DesafioBackEnd.API.Application.Dto.Transacao;
+using DesafioBackEnd.API.Domain.Entity;
 
 namespace DesafioBackEnd.API.Data.Repository.Interfaces
 {
@@ -6,6 +7,6 @@ namespace DesafioBackEnd.API.Data.Repository.Interfaces
     {
         Task<Transacao> CreateTransacaoAsync(Transacao transacao);
         Task<Transacao> GetByIdAsync(long? id);
-        Task<IEnumerable<Transacao>> GetTransacoesAsync();
+        Task<IEnumerable<DetailTransacaoDto>> GetTransacoesAsync();
     }
 }

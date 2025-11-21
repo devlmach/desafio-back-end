@@ -3,6 +3,8 @@ using DesafioBackEnd.API.Application.Command.Queries;
 using DesafioBackEnd.API.Application.Command.Transacoes;
 using DesafioBackEnd.API.Application.Dto.Transacao;
 using DesafioBackEnd.API.Application.Service.Interfaces;
+using DesafioBackEnd.API.Data.Repository.Interfaces;
+using DesafioBackEnd.API.Domain.Entity;
 using MediatR;
 
 namespace DesafioBackEnd.API.Application.Service
@@ -11,16 +13,36 @@ namespace DesafioBackEnd.API.Application.Service
     {
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
+        private readonly ITransacaoRepository _transacaoRepository;
+        private readonly IUsuarioRepository _usuarioRepository;
 
-        public TransacaoService(IMapper mapper, IMediator mediator)
+        public TransacaoService(IMapper mapper, IMediator mediator, IUsuarioRepository usuarioRepository, ITransacaoRepository transacaoRepository)
         {
             _mapper = mapper;
             _mediator = mediator;
+            _usuarioRepository = usuarioRepository;
+            _transacaoRepository = transacaoRepository;
         }
 
         public async Task CreateTransacaoAsync(CreateTransacaoDto createTransacaoDto)
         {
+            var senderId = await _usuarioRepository.GetByIdAsync(createTransacaoDto.IdSender);
+            var receiverId = await _usuarioRepository.GetByIdAsync(createTransacaoDto.IdReceiver);
+
+            if (senderId == null || senderId.IsActive == false)
+                throw new Exception("Sender user cannot be found.");
+
+            if (receiverId == null || receiverId.IsActive == false)
+                throw new Exception("Receiver user cannot be found.");
+
+            if (senderId.Tipo == UserType.LOJISTA)
+                throw new Exception("LOJISTAS cant make transfer");
+
+            senderId.Carteira -= createTransacaoDto.QuantiaTransferida;
+            receiverId.Carteira += createTransacaoDto.QuantiaTransferida;
+
             var transacaoCreateCommand = _mapper.Map<CreateTransacaoDto, TransacaoCreateCommand>(createTransacaoDto);
+            
             await _mediator.Send(transacaoCreateCommand);
         }
 
@@ -34,9 +56,9 @@ namespace DesafioBackEnd.API.Application.Service
             return _mapper.Map<DetailTransacaoDto>(result);
         }
 
-        public Task<IEnumerable<DetailTransacaoDto>> GetTransacoesAsync()
+        public async Task<IEnumerable<DetailTransacaoDto>> GetTransacoesAsync()
         {
-            throw new NotImplementedException();
+            return await _transacaoRepository.GetTransacoesAsync();
         }
     }
 }

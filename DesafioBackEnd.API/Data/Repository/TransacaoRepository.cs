@@ -1,4 +1,5 @@
-﻿using DesafioBackEnd.API.Application.Service.Interfaces;
+﻿using DesafioBackEnd.API.Application.Dto.Transacao;
+using DesafioBackEnd.API.Application.Service.Interfaces;
 using DesafioBackEnd.API.Data.Context;
 using DesafioBackEnd.API.Data.Repository.Interfaces;
 using DesafioBackEnd.API.Domain.Entity;
@@ -10,7 +11,7 @@ namespace DesafioBackEnd.API.Data.Repository
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public TransacaoRepository(ApplicationDbContext dbContext, IUsuarioService usuarioService)
+        public TransacaoRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -27,9 +28,20 @@ namespace DesafioBackEnd.API.Data.Repository
             return await _dbContext.Transacoes.FindAsync(id);
         }
 
-        public async Task<IEnumerable<Transacao>> GetTransacoesAsync()
+        public async Task<IEnumerable<DetailTransacaoDto>> GetTransacoesAsync()
         {
-            return await _dbContext.Transacoes.ToListAsync();
+            var query = _dbContext.Transacoes.AsQueryable();
+
+            return await query.Select(
+                u => new DetailTransacaoDto
+                {
+                    Id = u.Id,
+                    IdSender = u.IdSender,
+                    IdReceiver = u.IdReceiver,
+                    QuantiaTransferida = u.QuantiaTransferida,
+                    CreatedAt = u.CreatedAt
+                }).ToListAsync();
+            }
         }
     }
-}
+
