@@ -45,7 +45,7 @@ namespace DesafioBackEnd.API.Application.Service
         }
             
 
-        public async Task<IEnumerable<DetailUsuarioDto>> GetUsuariosAsync(string? nomeCompleto, string? cpf, string? email, UserType? tipo, bool? isActive)
+        public async Task<IEnumerable<DetailUsuarioDto>> GetUsuariosAsync(string? nomeCompleto, string? cpf, string? email, UserType? tipo, bool? isActive, int pageNumber, int pageSize)
         {
             var usuariosQuery = new GetUsuariosQuery
             {
@@ -53,7 +53,9 @@ namespace DesafioBackEnd.API.Application.Service
                 Cpf = cpf,
                 Email = email,
                 Tipo = tipo,
-                IsActive = isActive
+                IsActive = isActive,
+                PageSize = pageSize,
+                PageNumber = pageNumber
 
             };
             if (usuariosQuery == null)

@@ -16,7 +16,7 @@ namespace DesafioBackEnd.API.Application.Command.Handler.Usuarios
 
         public async Task<IEnumerable<DetailUsuarioDto>> Handle(GetUsuariosQuery request, CancellationToken cancellationToken)
         {
-            return await _usuarioRepository.GetUsuariosAsync(request.NomeCompleto, request.Cpf, request.Email, request.Tipo, request.IsActive);
+            return await _usuarioRepository.GetUsuariosAsync(request.NomeCompleto, request.Cpf, request.Email, request.Tipo, request.IsActive, request.PageNumber, request.PageSize);
         }
     }
 }

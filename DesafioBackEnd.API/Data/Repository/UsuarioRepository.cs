@@ -49,7 +49,7 @@ namespace DesafioBackEnd.API.Data.Repository
             return await _dbContext.Usuarios.FindAsync(id);
         }
         
-        public async Task<IEnumerable<DetailUsuarioDto>> GetUsuariosAsync(string? nomeCompleto, string? cpf, string? email, UserType? tipo, bool? isActive)
+        public async Task<IEnumerable<DetailUsuarioDto>> GetUsuariosAsync(string? nomeCompleto, string? cpf, string? email, UserType? tipo, bool? isActive, int pageNumber, int pageSize)
         {
             var query = _dbContext.Usuarios.AsQueryable();
 
@@ -67,6 +67,8 @@ namespace DesafioBackEnd.API.Data.Repository
 
             if (isActive.HasValue)
                 query = query.Where(u => u.IsActive == isActive.Value);
+
+            query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
 
             return await query.Select(
                 u => new DetailUsuarioDto
