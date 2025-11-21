@@ -16,7 +16,7 @@ namespace DesafioBackEnd.API.Application.Command.Handler.Transacoes
 
         public async Task<IEnumerable<DetailTransacaoDto>> Handle(GetTransacoesQuery request, CancellationToken cancellationToken)
         {
-            return await _transacaoRepository.GetTransacoesAsync();
+            return await _transacaoRepository.GetTransacoesAsync(request.PageNumber, request.PageSize);
         }
     }
 }

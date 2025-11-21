@@ -9,5 +9,8 @@ namespace DesafioBackEnd.API.Application.Command.Queries
         public long? IdSender { get; set; }
         public long? IdReceiver { get; set; }
         public decimal? QuantiaTransferida { get; set; }
+
+        public int PageNumber { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
     }
 }

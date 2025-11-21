@@ -56,9 +56,19 @@ namespace DesafioBackEnd.API.Application.Service
             return _mapper.Map<DetailTransacaoDto>(result);
         }
 
-        public async Task<IEnumerable<DetailTransacaoDto>> GetTransacoesAsync()
+        public async Task<IEnumerable<DetailTransacaoDto>> GetTransacoesAsync(int pageNumber, int pageSize)
         {
-            return await _transacaoRepository.GetTransacoesAsync();
+            var transacoesQuery = new GetTransacoesQuery
+            {
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+
+            if (transacoesQuery ==  null)
+                throw new Exception($"Entities could not be loaded");
+
+            var result = await _mediator.Send(transacoesQuery);
+            return _mapper.Map<IEnumerable<DetailTransacaoDto>>(result);
         }
     }
 }

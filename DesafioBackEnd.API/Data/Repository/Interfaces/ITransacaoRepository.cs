@@ -7,6 +7,6 @@ namespace DesafioBackEnd.API.Data.Repository.Interfaces
     {
         Task<Transacao> CreateTransacaoAsync(Transacao transacao);
         Task<Transacao> GetByIdAsync(long? id);
-        Task<IEnumerable<DetailTransacaoDto>> GetTransacoesAsync();
+        Task<IEnumerable<DetailTransacaoDto>> GetTransacoesAsync(int pageNumber, int pageSize);
     }
 }

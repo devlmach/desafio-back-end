@@ -1,4 +1,5 @@
-﻿using DesafioBackEnd.API.Application.Dto.Transacao;
+﻿using DesafioBackEnd.API.Application.Command.Queries;
+using DesafioBackEnd.API.Application.Dto.Transacao;
 using DesafioBackEnd.API.Application.Dto.Usuarios;
 using DesafioBackEnd.API.Application.Service.Interfaces;
 using DesafioBackEnd.API.Domain.Entity;
@@ -49,11 +50,14 @@ namespace DesafioBackEnd.API.Controllers
             return Ok(transacao);
         }
 
-
+        /// <summary>
+        /// Endpoint para retornar todas as transações
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DetailTransacaoDto>>> GetAllTransacoes()
+        public async Task<ActionResult<IEnumerable<DetailTransacaoDto>>> GetAllTransacoes([FromQuery] QueryTransacaoParameter queryParameter)
         {
-            var transacoes = await _transacaoService.GetTransacoesAsync();
+            var transacoes = await _transacaoService.GetTransacoesAsync(queryParameter.PageNumber, queryParameter.PageSize);
             return Ok(transacoes);
         }
     }

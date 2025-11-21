@@ -2,7 +2,7 @@
 
 namespace DesafioBackEnd.API.Application.Command.Queries
 {
-    public class QueryParameter
+    public class QueryUsuarioParameter
     {
         public string? NomeCompleto { get; set; }
         public string? Cpf { get; set; }

@@ -28,9 +28,11 @@ namespace DesafioBackEnd.API.Data.Repository
             return await _dbContext.Transacoes.FindAsync(id);
         }
 
-        public async Task<IEnumerable<DetailTransacaoDto>> GetTransacoesAsync()
+        public async Task<IEnumerable<DetailTransacaoDto>> GetTransacoesAsync(int pageNumber, int pageSize)
         {
             var query = _dbContext.Transacoes.AsQueryable();
+
+            query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
 
             return await query.Select(
                 u => new DetailTransacaoDto

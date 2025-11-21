@@ -60,7 +60,7 @@ namespace DesafioBackEnd.API.Controllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(DetailUsuarioDto), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<DetailUsuarioDto>>> GetAllUsuarios([FromQuery] QueryParameter queryParameter)
+        public async Task<ActionResult<IEnumerable<DetailUsuarioDto>>> GetAllUsuarios([FromQuery] QueryUsuarioParameter queryParameter)
         {
             var usuarios = await _usuarioService.GetUsuariosAsync(queryParameter.NomeCompleto, queryParameter.Cpf, queryParameter.Email, queryParameter.Tipo, queryParameter.IsActive, queryParameter.PageNumber,
                 queryParameter.PageSize);
