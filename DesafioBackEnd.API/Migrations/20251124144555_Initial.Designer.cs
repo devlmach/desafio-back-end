@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DesafioBackEnd.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251113180403_Inicial")]
-    partial class Inicial
+    [Migration("20251124144555_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace DesafioBackEnd.API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DesafioBackEnd.API.Domain.Context.ApplicationUser", b =>
+            modelBuilder.Entity("DesafioBackEnd.API.Data.Context.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -90,7 +90,7 @@ namespace DesafioBackEnd.API.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("DesafioBackEnd.API.Entity.Transacao", b =>
+            modelBuilder.Entity("DesafioBackEnd.API.Domain.Entity.Transacao", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -101,11 +101,11 @@ namespace DesafioBackEnd.API.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IdReceiver")
-                        .HasColumnType("int");
+                    b.Property<long>("IdReceiver")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("IdSender")
-                        .HasColumnType("int");
+                    b.Property<long>("IdSender")
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -121,7 +121,7 @@ namespace DesafioBackEnd.API.Migrations
                     b.ToTable("Transacoes");
                 });
 
-            modelBuilder.Entity("DesafioBackEnd.API.Entity.Usuario", b =>
+            modelBuilder.Entity("DesafioBackEnd.API.Domain.Entity.Usuario", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -317,7 +317,7 @@ namespace DesafioBackEnd.API.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("DesafioBackEnd.API.Domain.Context.ApplicationUser", null)
+                    b.HasOne("DesafioBackEnd.API.Data.Context.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -326,7 +326,7 @@ namespace DesafioBackEnd.API.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("DesafioBackEnd.API.Domain.Context.ApplicationUser", null)
+                    b.HasOne("DesafioBackEnd.API.Data.Context.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -341,7 +341,7 @@ namespace DesafioBackEnd.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DesafioBackEnd.API.Domain.Context.ApplicationUser", null)
+                    b.HasOne("DesafioBackEnd.API.Data.Context.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -350,7 +350,7 @@ namespace DesafioBackEnd.API.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("DesafioBackEnd.API.Domain.Context.ApplicationUser", null)
+                    b.HasOne("DesafioBackEnd.API.Data.Context.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

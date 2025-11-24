@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DesafioBackEnd.API.Migrations
 {
     /// <inheritdoc />
-    public partial class Inicial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,8 +56,8 @@ namespace DesafioBackEnd.API.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IdSender = table.Column<int>(type: "int", nullable: false),
-                    IdReceiver = table.Column<int>(type: "int", nullable: false),
+                    IdSender = table.Column<long>(type: "bigint", nullable: false),
+                    IdReceiver = table.Column<long>(type: "bigint", nullable: false),
                     QuantiaTransferida = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),

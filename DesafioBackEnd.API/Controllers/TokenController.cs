@@ -7,5 +7,6 @@ namespace DesafioBackEnd.API.Controllers
     [ApiController]
     public class TokenController : ControllerBase
     {
+       
     }
 }
