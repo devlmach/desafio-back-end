@@ -19,6 +19,7 @@ namespace DesafioBackEnd.API.Application.Mapping
             CreateMap<Transacao, CreateTransacaoDto>().ReverseMap();
             CreateMap<CreateTransacaoDto, TransacaoCreateCommand>().ReverseMap();
             CreateMap<Transacao, DetailTransacaoDto>().ReverseMap();
+
         }
     }
 }

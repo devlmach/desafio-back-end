@@ -1,10 +1,9 @@
 ﻿using DesafioBackEnd.API.Application.Command.Queries;
 using DesafioBackEnd.API.Application.Dto.Transacao;
-using DesafioBackEnd.API.Application.Dto.Usuarios;
 using DesafioBackEnd.API.Application.Service.Interfaces;
-using DesafioBackEnd.API.Domain.Entity;
 using DesafioBackEnd.API.Domain.Errors;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace DesafioBackEnd.API.Controllers
 {
