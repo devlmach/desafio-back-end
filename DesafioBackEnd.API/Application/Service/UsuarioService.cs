@@ -3,8 +3,11 @@ using DesafioBackEnd.API.Application.Command.Queries;
 using DesafioBackEnd.API.Application.Command.Usuarios;
 using DesafioBackEnd.API.Application.Dto.Usuarios;
 using DesafioBackEnd.API.Application.Service.Interfaces;
+using DesafioBackEnd.API.Data.Context;
+using DesafioBackEnd.API.Domain.Account.Interface;
 using DesafioBackEnd.API.Domain.Entity;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace DesafioBackEnd.API.Application.Service
 {
@@ -12,16 +15,19 @@ namespace DesafioBackEnd.API.Application.Service
     {
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
+        private readonly IAuthenticate _authenticate;
 
-        public UsuarioService(IMapper mapper, IMediator mediator)
+        public UsuarioService(IMapper mapper, IMediator mediator, IAuthenticate authenticate)
         {
             _mapper = mapper;
             _mediator = mediator;
+            _authenticate = authenticate;
         }
 
         public async Task AddAsync(CreateUsuarioDto createUsuarioDto)
         {
             var usuarioCreateCommand = _mapper.Map<CreateUsuarioDto, UsuarioCreateCommand>(createUsuarioDto);
+            await _authenticate.RegisterUser(createUsuarioDto.Email, createUsuarioDto.Senha);
             await _mediator.Send(usuarioCreateCommand);
         }
 

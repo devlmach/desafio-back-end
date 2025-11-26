@@ -12,5 +12,7 @@ namespace DesafioBackEnd.API.Application.Dto.Model
         [StringLength(20, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 10)]
         [DataType(DataType.Password)]
         public required string Password { get; set; }
+
+        public required string Role { get; set; }    
     }
 }

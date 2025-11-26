@@ -38,6 +38,9 @@ namespace DesafioBackEnd.API.Application.Service
             if (senderId.Tipo == UserType.LOJISTA)
                 throw new Exception("LOJISTAS cant make transfer");
 
+            if (senderId.Carteira < createTransacaoDto.QuantiaTransferida || senderId.Carteira <= 0)
+                throw new Exception("Sender has less then the quantity to complete the transfer");
+
             senderId.Carteira -= createTransacaoDto.QuantiaTransferida;
             receiverId.Carteira += createTransacaoDto.QuantiaTransferida;
 
