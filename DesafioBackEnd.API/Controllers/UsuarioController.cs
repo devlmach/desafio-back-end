@@ -2,10 +2,10 @@
 using DesafioBackEnd.API.Application.Dto.Usuarios;
 using DesafioBackEnd.API.Application.Service.Interfaces;
 using DesafioBackEnd.API.Common.Middleware;
-using DesafioBackEnd.API.Domain.Entity;
 using DesafioBackEnd.API.Domain.Errors;
-using FluentAssertions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace DesafioBackEnd.API.Controllers
 {
@@ -25,6 +25,7 @@ namespace DesafioBackEnd.API.Controllers
         /// <param name="usuario"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(DetailUsuarioDto), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
@@ -43,13 +44,29 @@ namespace DesafioBackEnd.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin, User")]
         [ProducesResponseType(typeof(DetailUsuarioDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<DetailUsuarioDto>> GetUsuarioById(int? id)
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult<DetailUsuarioDto>> GetUsuarioById(long? id)
         {
             var usuario = await _usuarioService.GetByIdAsync(id);
             if (usuario == null)
                 throw new NotFoundException("User not found.");
+
+            if (User.IsInRole("Admin"))
+                return Ok(usuario);
+
+            if (User.IsInRole("User"))
+            {
+                var userEmail = User.FindFirstValue(ClaimTypes.Email);
+                if (usuario.Email != userEmail)
+                {
+                    throw new ForbiddenException("User typerole User can only see your own details.");
+                }
+
+                return Ok(usuario);
+            }
 
             return Ok(usuario);
         }
@@ -59,11 +76,13 @@ namespace DesafioBackEnd.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(DetailUsuarioDto), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<DetailUsuarioDto>>> GetAllUsuarios([FromQuery] QueryUsuarioParameter queryParameter)
         {
             var usuarios = await _usuarioService.GetUsuariosAsync(queryParameter.NomeCompleto, queryParameter.Cpf, queryParameter.Email, queryParameter.Tipo, queryParameter.IsActive, queryParameter.PageNumber,
                 queryParameter.PageSize);
+
             return Ok(usuarios);
         }
 
@@ -74,15 +93,26 @@ namespace DesafioBackEnd.API.Controllers
         /// <param name="updateUsuarioDto"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin, User")]
         [ProducesResponseType(typeof(UpdateUsuarioDto), StatusCodes.Status202Accepted)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> UpdateUsuario(int? id, [FromBody] UpdateUsuarioDto updateUsuarioDto)
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult> UpdateUsuario(long? id, [FromBody] UpdateUsuarioDto updateUsuarioDto)
         {
             if (id != updateUsuarioDto.Id)
                 throw new BadRequestException("Different id for operation.");
 
             if (updateUsuarioDto == null)
                 throw new BadRequestException("Invalid data.");
+
+            if (User.IsInRole("User"))
+            {
+                var emailUser = User.FindFirstValue(ClaimTypes.Email);
+                if (updateUsuarioDto.Email != emailUser)
+                {
+                    throw new ForbiddenException("User typerole User cannot update other users details.");
+                }
+            }
 
             await _usuarioService.UpdateAsync(updateUsuarioDto);
             return Ok(updateUsuarioDto);
@@ -106,6 +136,5 @@ namespace DesafioBackEnd.API.Controllers
             await _usuarioService.DeleteAsync(id);
             return Ok(usuario);
         }
-
     }
 }
