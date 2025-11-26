@@ -15,7 +15,7 @@ namespace DesafioBackEnd.API.Application.Dto.Usuarios
         [Required(ErrorMessage = "O campo {0} não pode ser nulo")]
         public required string Email { get; set; }
 
-        public string? Senha { get; set; }
+        public required string Senha { get; set; }
 
         [Required(ErrorMessage = "O tipo do usuário não pode ser nulo")]
         public required UserType Tipo { get; set; }
