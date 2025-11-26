@@ -2,8 +2,8 @@
 using DesafioBackEnd.API.Application.Dto.Transacao;
 using DesafioBackEnd.API.Application.Service.Interfaces;
 using DesafioBackEnd.API.Domain.Errors;
+using DesafioBackEnd.API.Integrations.Authorization.Interface;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace DesafioBackEnd.API.Controllers
 {
@@ -12,9 +12,12 @@ namespace DesafioBackEnd.API.Controllers
     public class TransacaoController : ControllerBase
     {
         private readonly ITransacaoService _transacaoService;
-        public TransacaoController(ITransacaoService transacaoService)
+        private readonly IAuthorizationService _authorizationService;
+
+        public TransacaoController(ITransacaoService transacaoService, IAuthorizationService authorizationService)
         {
             _transacaoService = transacaoService;
+            _authorizationService = authorizationService;
         }
 
         /// <summary>
@@ -28,6 +31,11 @@ namespace DesafioBackEnd.API.Controllers
         {
             if (transacao == null)
                 return BadRequest();
+
+            bool autorizado = await _authorizationService.IsAuthorizedAsync();
+
+            if (!autorizado)
+                throw new BadRequestException("Denied transaction");
 
             await _transacaoService.CreateTransacaoAsync(transacao);
             return Ok(transacao);

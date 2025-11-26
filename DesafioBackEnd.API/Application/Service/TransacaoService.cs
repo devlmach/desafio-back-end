@@ -13,15 +13,15 @@ namespace DesafioBackEnd.API.Application.Service
     {
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
-        private readonly ITransacaoRepository _transacaoRepository;
+        //private readonly ITransacaoRepository _transacaoRepository;
         private readonly IUsuarioRepository _usuarioRepository;
 
-        public TransacaoService(IMapper mapper, IMediator mediator, IUsuarioRepository usuarioRepository, ITransacaoRepository transacaoRepository)
+        public TransacaoService(IMapper mapper, IMediator mediator, IUsuarioRepository usuarioRepository)
         {
             _mapper = mapper;
             _mediator = mediator;
             _usuarioRepository = usuarioRepository;
-            _transacaoRepository = transacaoRepository;
+            //_transacaoRepository = transacaoRepository;
         }
 
         public async Task CreateTransacaoAsync(CreateTransacaoDto createTransacaoDto)

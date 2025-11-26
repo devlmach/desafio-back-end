@@ -1,6 +1,8 @@
 using DesafioBackEnd.API.Application.Mapping;
 using DesafioBackEnd.API.Common.Middleware;
 using DesafioBackEnd.API.Domain.Account.Interface;
+using DesafioBackEnd.API.Integrations.Authorization.Interface;
+using DesafioBackEnd.API.Integrations.Authorization.Service;
 using DesafioBackEnd.API.IoC;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
@@ -72,6 +74,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 
 builder.Services.AddAutoMapper(cfg => { }, typeof(DomainToDTOProfile).Assembly);
+
+builder.Services.AddHttpClient<IAuthorizationService, ExternalAuthorizationService>();
 
 var app = builder.Build();
 
