@@ -3,6 +3,9 @@ using DesafioBackEnd.API.Application.Service.Interfaces;
 using DesafioBackEnd.API.Data.Context;
 using DesafioBackEnd.API.Data.Repository;
 using DesafioBackEnd.API.Data.Repository.Interfaces;
+using DesafioBackEnd.API.Domain.Account;
+using DesafioBackEnd.API.Domain.Account.Interface;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace DesafioBackEnd.API.IoC
@@ -14,11 +17,17 @@ namespace DesafioBackEnd.API.IoC
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                 b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IUsuarioService, UsuarioService>();
 
             services.AddScoped<ITransacaoRepository, TransacaoRepository>();
             services.AddScoped<ITransacaoService, TransacaoService>();
+
+            services.AddScoped<IAuthenticate, AuthenticateService>();
+
+            services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();
 
             services.AddAutoMapper(cfg =>
             {
