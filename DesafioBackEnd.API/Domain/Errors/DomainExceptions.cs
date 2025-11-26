@@ -14,4 +14,9 @@
     {
         public BadRequestException(string message) : base(message) { }
     }
+
+    public class ForbiddenException : DomainExceptions
+    {
+        public ForbiddenException(string messase) : base(messase) { }
+    }
 }
