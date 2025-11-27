@@ -22,9 +22,12 @@ namespace DesafioBackEnd.API.Domain.Entity
         [Required]
         public decimal Carteira { get; set; }
 
+        [Required]
+        public UserRole? Role { get; set; }
+
         public Usuario() {}
 
-        public Usuario(long id, string nomeCompleto, string cpf, string email, string senha, UserType tipo, decimal carteira, DateTime createdAt, DateTime updatedAt, bool isActive)
+        public Usuario(long id, string nomeCompleto, string cpf, string email, string senha, UserType tipo, UserRole role, decimal carteira, DateTime createdAt, DateTime updatedAt, bool isActive)
         {
             Id = id;
             NomeCompleto = nomeCompleto;
@@ -32,19 +35,21 @@ namespace DesafioBackEnd.API.Domain.Entity
             Email = email;
             Senha = senha;
             Tipo = tipo;
+            Role = role;
             Carteira = carteira;
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;
             IsActive = isActive;
         }
 
-        public Usuario(string nomeCompleto, string cpf, string email, string senha, UserType tipo, decimal carteira, DateTime createdAt, DateTime updatedAt, bool isActive)
+        public Usuario(string nomeCompleto, string cpf, string email, string senha, UserType tipo, UserRole role, decimal carteira, DateTime createdAt, DateTime updatedAt, bool isActive)
         {
             NomeCompleto = nomeCompleto;
             Cpf = cpf;
             Email = email;
             Senha = senha;
             Tipo = tipo;
+            Role = role;
             Carteira = carteira;
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;
@@ -52,7 +57,7 @@ namespace DesafioBackEnd.API.Domain.Entity
         }
 
         public void Update(string nome, string cpf, string email, string senha,
-            UserType tipo, decimal carteira, DateTime createdAt, DateTime updatedAt,
+            UserType tipo, UserRole role, decimal carteira, DateTime createdAt, DateTime updatedAt,
             bool isActive)
         {
             NomeCompleto = nome;
@@ -60,6 +65,7 @@ namespace DesafioBackEnd.API.Domain.Entity
             Email = email;
             Senha = senha;
             Tipo = tipo;
+            Role = role;
             Carteira = carteira;
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;

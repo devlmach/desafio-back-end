@@ -75,7 +75,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 builder.Services.AddAutoMapper(cfg => { }, typeof(DomainToDTOProfile).Assembly);
 
-builder.Services.AddHttpClient<IAuthorizationService, ExternalAuthorizationService>();
+builder.Services.AddHttpClient<IAuthorizationsService, ExternalAuthorizationService>();
 
 var app = builder.Build();
 

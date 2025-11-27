@@ -1,8 +1,10 @@
 ﻿using DesafioBackEnd.API.Application.Command.Queries;
-using DesafioBackEnd.API.Application.Dto.Transacao;
+using DesafioBackEnd.API.Application.Dto.Transacoes;
 using DesafioBackEnd.API.Application.Service.Interfaces;
+using DesafioBackEnd.API.Domain.Entity;
 using DesafioBackEnd.API.Domain.Errors;
 using DesafioBackEnd.API.Integrations.Authorization.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DesafioBackEnd.API.Controllers
@@ -12,9 +14,9 @@ namespace DesafioBackEnd.API.Controllers
     public class TransacaoController : ControllerBase
     {
         private readonly ITransacaoService _transacaoService;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly IAuthorizationsService _authorizationService;
 
-        public TransacaoController(ITransacaoService transacaoService, IAuthorizationService authorizationService)
+        public TransacaoController(ITransacaoService transacaoService, IAuthorizationsService authorizationService)
         {
             _transacaoService = transacaoService;
             _authorizationService = authorizationService;
@@ -37,6 +39,7 @@ namespace DesafioBackEnd.API.Controllers
             if (!autorizado)
                 throw new BadRequestException("Denied transaction");
 
+
             await _transacaoService.CreateTransacaoAsync(transacao);
             return Ok(transacao);
         }
@@ -48,13 +51,24 @@ namespace DesafioBackEnd.API.Controllers
         /// <returns></returns>
         /// <exception cref="NotFoundException"></exception>
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<DetailTransacaoDto>> GetById(long? id)
         {
+            var user = TokenController.GetUser(Request);
+        
             var transacao = await _transacaoService.GetTransacaoByIdAsync(id);
-            if (transacao == null)
-                throw new NotFoundException($"Transaction with id {id} not found");
 
-            return Ok(transacao);
+            if(User.IsInRole(UserRole.User.ToString()))
+                if (transacao == null || transacao.IdSender != user.Id && transacao.IdReceiver != user.Id)
+                {
+                    throw new NotFoundException($"User typerole user cannot see other users transactions.");
+                }
+                else
+                {
+                    return Ok(transacao);
+                }
+
+            return Ok(transacao);  
         }
 
         /// <summary>
@@ -62,10 +76,24 @@ namespace DesafioBackEnd.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<DetailTransacaoDto>>> GetAllTransacoes([FromQuery] QueryTransacaoParameter queryParameter)
         {
             var transacoes = await _transacaoService.GetTransacoesAsync(queryParameter.PageNumber, queryParameter.PageSize);
+
+
+            if (User.IsInRole("Admin"))
+            {
+                return Ok(transacoes);
+            }
+
+            if (User.IsInRole(UserRole.User.ToString()))
+            {
+                
+            }
+
             return Ok(transacoes);
+
         }
     }
 }

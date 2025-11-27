@@ -16,6 +16,8 @@ namespace DesafioBackEnd.API.Application.Dto.Usuarios
 
         public UserType? Tipo { get; set; }
 
+        public UserRole? Role { get; set; }
+
         public decimal Carteira { get; set; }
 
         public DateTime CreatedAt { get; set; }

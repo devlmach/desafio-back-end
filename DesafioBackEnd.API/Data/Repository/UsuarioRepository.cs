@@ -31,7 +31,7 @@ namespace DesafioBackEnd.API.Data.Repository
                     throw new BadRequestException("Erro: Cpf já está em uso.");
 
                 if(errorMessage.Contains("Email"))
-                    throw new BadRequestException("Email já está em uso.");
+                    throw new BadRequestException("Erro: Email já está em uso.");
 
                 throw;
             }
@@ -49,7 +49,7 @@ namespace DesafioBackEnd.API.Data.Repository
             return await _dbContext.Usuarios.FindAsync(id);
         }
         
-        public async Task<IEnumerable<DetailUsuarioDto>> GetUsuariosAsync(string? nomeCompleto, string? cpf, string? email, UserType? tipo, bool? isActive, int pageNumber, int pageSize)
+        public async Task<IEnumerable<DetailUsuarioDto>> GetUsuariosAsync(string? nomeCompleto, string? cpf, string? email, UserType? tipo, UserRole? role, bool? isActive, int pageNumber, int pageSize)
         {
             var query = _dbContext.Usuarios.AsQueryable();
 
@@ -79,6 +79,7 @@ namespace DesafioBackEnd.API.Data.Repository
                     Email = u.Email,
                     Senha = u.Senha,
                     Tipo = u.Tipo,
+                    Role = u.Role,
                     Carteira = u.Carteira,
                     CreatedAt = u.CreatedAt,
                     UpdatedAt = u.UpdatedAt,

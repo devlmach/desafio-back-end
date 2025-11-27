@@ -1,4 +1,4 @@
-﻿namespace DesafioBackEnd.API.Application.Dto.Transacao
+﻿namespace DesafioBackEnd.API.Application.Dto.Transacoes
 {
     public class DetailTransacaoDto
     {

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DesafioBackEnd.API.Application.Command.Queries;
 using DesafioBackEnd.API.Application.Command.Transacoes;
-using DesafioBackEnd.API.Application.Dto.Transacao;
+using DesafioBackEnd.API.Application.Dto.Transacoes;
 using DesafioBackEnd.API.Application.Service.Interfaces;
 using DesafioBackEnd.API.Data.Repository.Interfaces;
 using DesafioBackEnd.API.Domain.Entity;

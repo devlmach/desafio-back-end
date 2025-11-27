@@ -1,6 +1,6 @@
 ﻿namespace DesafioBackEnd.API.Integrations.Authorization.Interface
 {
-    public interface IAuthorizationService
+    public interface IAuthorizationsService
     {
         Task<bool> IsAuthorizedAsync();
     }

@@ -43,10 +43,11 @@ namespace DesafioBackEnd.API.Common.Middleware
                     Message = ex.Message
                 };
 
-                var options = new JsonSerializerOptions
+                JsonSerializerOptions jsonSerializerOptions = new()
                 {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 };
+                var options = jsonSerializerOptions;
 
                 await context.Response.WriteAsync(JsonSerializer.Serialize(response, options));
             }

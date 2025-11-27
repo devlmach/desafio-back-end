@@ -24,7 +24,7 @@ namespace DesafioBackEnd.API.Application.Command.Handler.Usuarios
             }
             else
             {
-                usuario.Update(request.NomeCompleto, request.Cpf, request.Email, request.Senha, request.Tipo,
+                usuario.Update(request.NomeCompleto, request.Cpf, request.Email, request.Senha, request.Tipo, request.Role,
                     request.Carteira, request.CreatedAt, request.UpdatedAt, request.IsActive);
                 return await _usuarioRepository.UpdateAsync(usuario);
             }

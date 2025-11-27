@@ -16,19 +16,29 @@ namespace DesafioBackEnd.API.Application.Service
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
         private readonly IAuthenticate _authenticate;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UsuarioService(IMapper mapper, IMediator mediator, IAuthenticate authenticate)
+        public UsuarioService(IMapper mapper, IMediator mediator, IAuthenticate authenticate, UserManager<ApplicationUser> userManager)
         {
             _mapper = mapper;
             _mediator = mediator;
             _authenticate = authenticate;
+            _userManager = userManager;
         }
 
         public async Task AddAsync(CreateUsuarioDto createUsuarioDto)
         {
             var usuarioCreateCommand = _mapper.Map<CreateUsuarioDto, UsuarioCreateCommand>(createUsuarioDto);
-            await _authenticate.RegisterUser(createUsuarioDto.Email, createUsuarioDto.Senha);
             await _mediator.Send(usuarioCreateCommand);
+            var register = _authenticate.RegisterUser(createUsuarioDto.Email, createUsuarioDto.Senha);
+
+            var user = new ApplicationUser
+            {
+                UserName = createUsuarioDto.Email,
+                Email = createUsuarioDto.Email
+            };
+
+            await _userManager.AddToRoleAsync(user, createUsuarioDto.Role.ToString());
         }
 
         public async Task DeleteAsync(long? id)
@@ -51,7 +61,7 @@ namespace DesafioBackEnd.API.Application.Service
         }
             
 
-        public async Task<IEnumerable<DetailUsuarioDto>> GetUsuariosAsync(string? nomeCompleto, string? cpf, string? email, UserType? tipo, bool? isActive, int pageNumber, int pageSize)
+        public async Task<IEnumerable<DetailUsuarioDto>> GetUsuariosAsync(string? nomeCompleto, string? cpf, string? email, UserType? tipo, UserRole? role, bool? isActive, int pageNumber, int pageSize)
         {
             var usuariosQuery = new GetUsuariosQuery
             {
@@ -59,10 +69,11 @@ namespace DesafioBackEnd.API.Application.Service
                 Cpf = cpf,
                 Email = email,
                 Tipo = tipo,
+                Role = role,
                 IsActive = isActive,
                 PageSize = pageSize,
                 PageNumber = pageNumber
-
+                
             };
             if (usuariosQuery == null)
                 throw new Exception($"Entities could not be loaded");

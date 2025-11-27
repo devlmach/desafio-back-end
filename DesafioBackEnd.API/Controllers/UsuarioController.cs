@@ -2,6 +2,7 @@
 using DesafioBackEnd.API.Application.Dto.Usuarios;
 using DesafioBackEnd.API.Application.Service.Interfaces;
 using DesafioBackEnd.API.Common.Middleware;
+using DesafioBackEnd.API.Domain.Entity;
 using DesafioBackEnd.API.Domain.Errors;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ namespace DesafioBackEnd.API.Controllers
         /// <param name="usuario"></param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(DetailUsuarioDto), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
@@ -51,21 +52,27 @@ namespace DesafioBackEnd.API.Controllers
         public async Task<ActionResult<DetailUsuarioDto>> GetUsuarioById(long? id)
         {
             var usuario = await _usuarioService.GetByIdAsync(id);
-            if (usuario == null)
-                throw new NotFoundException("User not found.");
-
-            if (User.IsInRole("Admin"))
+           
+            if (User.IsInRole(UserRole.Admin.ToString()))
+            {
+                if(usuario == null)
+                {
+                    throw new NotFoundException("User not found.");
+                }
                 return Ok(usuario);
+            }
 
-            if (User.IsInRole("User"))
+            if (User.IsInRole(UserRole.User.ToString()))
             {
                 var userEmail = User.FindFirstValue(ClaimTypes.Email);
-                if (usuario.Email != userEmail)
+                if (usuario == null || usuario.Email != userEmail)
                 {
                     throw new ForbiddenException("User typerole User can only see your own details.");
                 }
-
-                return Ok(usuario);
+                else
+                {
+                    return Ok(usuario);
+                }               
             }
 
             return Ok(usuario);
@@ -80,7 +87,7 @@ namespace DesafioBackEnd.API.Controllers
         [ProducesResponseType(typeof(DetailUsuarioDto), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<DetailUsuarioDto>>> GetAllUsuarios([FromQuery] QueryUsuarioParameter queryParameter)
         {
-            var usuarios = await _usuarioService.GetUsuariosAsync(queryParameter.NomeCompleto, queryParameter.Cpf, queryParameter.Email, queryParameter.Tipo, queryParameter.IsActive, queryParameter.PageNumber,
+            var usuarios = await _usuarioService.GetUsuariosAsync(queryParameter.NomeCompleto, queryParameter.Cpf, queryParameter.Email, queryParameter.Tipo, queryParameter.Role, queryParameter.IsActive, queryParameter.PageNumber,
                 queryParameter.PageSize);
 
             return Ok(usuarios);
@@ -105,7 +112,7 @@ namespace DesafioBackEnd.API.Controllers
             if (updateUsuarioDto == null)
                 throw new BadRequestException("Invalid data.");
 
-            if (User.IsInRole("User"))
+            if (User.IsInRole(UserRole.User.ToString()))
             {
                 var emailUser = User.FindFirstValue(ClaimTypes.Email);
                 if (updateUsuarioDto.Email != emailUser)

@@ -1,6 +1,4 @@
-﻿using DesafioBackEnd.API.Application.Dto.Transacao;
-using DesafioBackEnd.API.Application.Dto.Usuarios;
-using DesafioBackEnd.API.Domain.Entity;
+﻿using DesafioBackEnd.API.Application.Dto.Transacoes;
 
 namespace DesafioBackEnd.API.Application.Service.Interfaces
 {

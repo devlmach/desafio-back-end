@@ -5,7 +5,7 @@ namespace DesafioBackEnd.API.Application.Service.Interfaces
 {
     public interface IUsuarioService
     {
-        Task<IEnumerable<DetailUsuarioDto>> GetUsuariosAsync(string? nomeCompleto, string? cpf, string? email, UserType? tipo, bool? isActive, int pageNumber, int pageSize);
+        Task<IEnumerable<DetailUsuarioDto>> GetUsuariosAsync(string? nomeCompleto, string? cpf, string? email, UserType? tipo, UserRole? role, bool? isActive, int pageNumber, int pageSize);
         Task<DetailUsuarioDto> GetByIdAsync(long? id);
         Task AddAsync(CreateUsuarioDto createUsuarioDto);
         Task UpdateAsync(UpdateUsuarioDto updateUsuarioDto);

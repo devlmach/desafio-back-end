@@ -1,5 +1,6 @@
 ﻿using DesafioBackEnd.API.Data.Context;
 using DesafioBackEnd.API.Domain.Account.Interface;
+using DesafioBackEnd.API.Domain.Entity;
 using Microsoft.AspNetCore.Identity;
 
 namespace DesafioBackEnd.API.Domain.Account
@@ -7,9 +8,9 @@ namespace DesafioBackEnd.API.Domain.Account
     public class SeedUserRoleInitial : ISeedUserRoleInitial
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
 
-        public SeedUserRoleInitial(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public SeedUserRoleInitial(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -19,7 +20,7 @@ namespace DesafioBackEnd.API.Domain.Account
         {
             if (!_roleManager.RoleExistsAsync("User").Result)
             {
-                IdentityRole role = new()
+                ApplicationRole role = new()
                 {
                     Name = "User",
                     NormalizedName = "USER",
@@ -31,7 +32,7 @@ namespace DesafioBackEnd.API.Domain.Account
 
             if (!_roleManager.RoleExistsAsync("Admin").Result)
             {
-                IdentityRole role = new()
+                ApplicationRole role = new()
                 {
                     Name = "Admin",
                     NormalizedName = "ADMIN",
@@ -61,7 +62,7 @@ namespace DesafioBackEnd.API.Domain.Account
 
                 if (result.Succeeded)
                 {
-                    _userManager.AddToRoleAsync(user, "User").Wait();
+                    _userManager.AddToRoleAsync(user, UserRole.User.ToString()).Wait();
                 }
             }
 
@@ -82,7 +83,7 @@ namespace DesafioBackEnd.API.Domain.Account
 
                 if (result.Succeeded)
                 {
-                    _userManager.AddToRoleAsync(user, "Admin").Wait();
+                    _userManager.AddToRoleAsync(user, UserRole.Admin.ToString()).Wait();
                 }
             }
         }

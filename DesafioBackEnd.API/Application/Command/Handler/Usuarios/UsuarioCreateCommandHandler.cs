@@ -16,7 +16,7 @@ namespace DesafioBackEnd.API.Application.Command.Handler.Usuarios
 
         public async Task<Usuario> Handle(UsuarioCreateCommand request, CancellationToken cancellationToken)
         {
-            var usuario = new Usuario(request.NomeCompleto, request.Cpf, request.Email, request.Senha, request.Tipo, request.Carteira, request.CreatedAt,
+            var usuario = new Usuario(request.NomeCompleto, request.Cpf, request.Email, request.Senha, request.Tipo, request.Role, request.Carteira, request.CreatedAt,
                 request.UpdatedAt, request.IsActive);
             if (usuario == null)
             {

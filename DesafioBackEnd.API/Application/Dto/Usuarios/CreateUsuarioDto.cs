@@ -19,5 +19,7 @@ namespace DesafioBackEnd.API.Application.Dto.Usuarios
 
         [Required(ErrorMessage = "O tipo do usuário não pode ser nulo")]
         public required UserType Tipo { get; set; }
+
+        public required UserRole Role { get; set; } = UserRole.User;
     }
 }

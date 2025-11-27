@@ -2,7 +2,7 @@
 
 namespace DesafioBackEnd.API.Integrations.Authorization.Service
 {
-    public class ExternalAuthorizationService : IAuthorizationService
+    public class ExternalAuthorizationService : IAuthorizationsService
     {
         private readonly HttpClient _httpClient;
 
