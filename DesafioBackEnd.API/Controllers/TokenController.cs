@@ -21,6 +21,11 @@ namespace DesafioBackEnd.API.Controllers
             //_configuration = configuration;
         }
 
+        /// <summary>
+        /// Endpoint para realizar login e receber token
+        /// </summary>
+        /// <param name="loginModel"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("loginUser")]
         public async Task<ActionResult<UserToken>> Login([FromBody] LoginModel loginModel)
@@ -35,7 +40,9 @@ namespace DesafioBackEnd.API.Controllers
         {
             var user = Request.HttpContext.User.Claims
                 .First(f => f.Type == ClaimTypes.UserData);
+            user = Request.HttpContext.User.Claims.Last(f => f.Type == ClaimTypes.UserData);
 
+            Console.WriteLine(user);
             return Ok(System.Text.Json.JsonSerializer.Deserialize<UserLoginData>(user.Value));
         }
 

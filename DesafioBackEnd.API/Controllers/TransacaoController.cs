@@ -72,7 +72,7 @@ namespace DesafioBackEnd.API.Controllers
         }
 
         /// <summary>
-        /// Endpoint para retornar todas as transações
+        /// Endpoint para retornar todas as transações de acordo com usuário autorizado
         /// </summary>
         /// <returns></returns>
         [HttpGet]

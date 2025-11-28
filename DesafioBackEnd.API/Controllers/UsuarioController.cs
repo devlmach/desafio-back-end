@@ -79,7 +79,7 @@ namespace DesafioBackEnd.API.Controllers
         }
 
         /// <summary>
-        /// Endpoint para retornar uma lista de usuários
+        /// Endpoint para retornar uma lista de usuários - apenas para Administrador
         /// </summary>
         /// <returns></returns>
         [HttpGet]
