@@ -77,6 +77,13 @@ builder.Services.AddAutoMapper(cfg => { }, typeof(DomainToDTOProfile).Assembly);
 
 builder.Services.AddHttpClient<IAuthorizationsService, ExternalAuthorizationService>();
 
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddRouting(opt =>
+{
+    opt.LowercaseUrls = true;
+});
+
 var app = builder.Build();
 
 using (var serviceScope = app.Services.CreateScope())
