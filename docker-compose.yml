@@ -1,0 +1,34 @@
+services:
+  api:
+    build:
+      context: ./DesafioBackEnd.API
+    image: desafiobackend-api
+    container_name: desafiobackend-api
+    ports:
+      - "5000:80"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8
+    container_name: desafiobackend-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: desafiobackend
+    ports:
+      - "1433:1433"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  proxy:
+    build:
+      context: ./proxy
+    image: desafiobackend-proxy
+    container_name: desafiobackend-proxy
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+
+volumes:
+  db_data:

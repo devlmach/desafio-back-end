@@ -76,24 +76,27 @@ namespace DesafioBackEnd.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, User")]
         public async Task<ActionResult<IEnumerable<DetailTransacaoDto>>> GetAllTransacoes([FromQuery] QueryTransacaoParameter queryParameter)
         {
-            var transacoes = await _transacaoService.GetTransacoesAsync(queryParameter.PageNumber, queryParameter.PageSize);
+            var userId = long.Parse(User.FindFirst("UserId")!.Value);
 
+            IEnumerable<DetailTransacaoDto> transacoes;
 
-            if (User.IsInRole("Admin"))
+            if (User.IsInRole(UserRole.Admin.ToString()))
             {
-                return Ok(transacoes);
+                transacoes = await _transacaoService.GetTransacoesAsync(queryParameter.PageNumber, queryParameter.PageSize);
             }
-
-            if (User.IsInRole(UserRole.User.ToString()))
+            else if (User.IsInRole(UserRole.User.ToString()))
             {
-                
+                transacoes = await _transacaoService.GetTransacoesUserAsync(userId, queryParameter.PageNumber, queryParameter.PageSize);
+            }
+            else
+            {
+                throw new ForbiddenException("Forbidden");
             }
 
             return Ok(transacoes);
-
         }
     }
 }

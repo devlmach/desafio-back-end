@@ -18,14 +18,15 @@ namespace DesafioBackEnd.API.Application.Service
         //private readonly ITransacaoRepository _transacaoRepository;
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ITransacaoRepository _transacaoRepository;
 
-        public TransacaoService(IMapper mapper, IMediator mediator, IUsuarioRepository usuarioRepository, IHttpContextAccessor httpContextAccessor)
+        public TransacaoService(IMapper mapper, IMediator mediator, IUsuarioRepository usuarioRepository, IHttpContextAccessor httpContextAccessor, ITransacaoRepository transacaoRepository)
         {
             _mapper = mapper;
             _mediator = mediator;
             _usuarioRepository = usuarioRepository;
             _httpContextAccessor = httpContextAccessor;
-            //_transacaoRepository = transacaoRepository;
+            _transacaoRepository = transacaoRepository;
         }
 
         public async Task CreateTransacaoAsync(CreateTransacaoDto createTransacaoDto)
@@ -90,6 +91,12 @@ namespace DesafioBackEnd.API.Application.Service
 
             var result = await _mediator.Send(transacoesQuery);
             return _mapper.Map<IEnumerable<DetailTransacaoDto>>(result);
+        }
+
+        public async Task<IEnumerable<DetailTransacaoDto>> GetTransacoesUserAsync(long userId, int pageNumber, int pageSize)
+        {
+            var transacoes = await _transacaoRepository.GetByUserAsync(userId, pageNumber, pageSize);
+            return _mapper.Map<IEnumerable<DetailTransacaoDto>>(transacoes);
         }
     }
 }
