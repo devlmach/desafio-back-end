@@ -28,6 +28,7 @@ namespace DesafioBackEnd.API.Controllers
         /// <param name="transacao"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize]
         [Route("/transfer")]
         public async Task<ActionResult> CreateTransaction([FromBody] CreateTransacaoDto transacao)
         {
@@ -38,7 +39,6 @@ namespace DesafioBackEnd.API.Controllers
 
             if (!autorizado)
                 throw new BadRequestException("Denied transaction");
-
 
             await _transacaoService.CreateTransacaoAsync(transacao);
             return Ok(transacao);

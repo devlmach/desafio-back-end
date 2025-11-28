@@ -6,6 +6,8 @@ using DesafioBackEnd.API.Application.Service.Interfaces;
 using DesafioBackEnd.API.Data.Repository.Interfaces;
 using DesafioBackEnd.API.Domain.Entity;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace DesafioBackEnd.API.Application.Service
 {
@@ -15,38 +17,54 @@ namespace DesafioBackEnd.API.Application.Service
         private readonly IMediator _mediator;
         //private readonly ITransacaoRepository _transacaoRepository;
         private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TransacaoService(IMapper mapper, IMediator mediator, IUsuarioRepository usuarioRepository)
+        public TransacaoService(IMapper mapper, IMediator mediator, IUsuarioRepository usuarioRepository, IHttpContextAccessor httpContextAccessor)
         {
             _mapper = mapper;
             _mediator = mediator;
             _usuarioRepository = usuarioRepository;
+            _httpContextAccessor = httpContextAccessor;
             //_transacaoRepository = transacaoRepository;
         }
 
         public async Task CreateTransacaoAsync(CreateTransacaoDto createTransacaoDto)
         {
-            var senderId = await _usuarioRepository.GetByIdAsync(createTransacaoDto.IdSender);
+            var idSender = long.Parse(_httpContextAccessor.HttpContext!.User.FindFirst("UserId")!.Value);
+            var sender = await _usuarioRepository.GetByIdAsync(idSender);
+
             var receiverId = await _usuarioRepository.GetByIdAsync(createTransacaoDto.IdReceiver);
 
-            if (senderId == null || senderId.IsActive == false)
+            if (sender == null || sender.IsActive == false)
                 throw new Exception("Sender user cannot be found.");
 
             if (receiverId == null || receiverId.IsActive == false)
                 throw new Exception("Receiver user cannot be found.");
 
-            if (senderId.Tipo == UserType.LOJISTA)
+            if (sender.Tipo == UserType.LOJISTA)
                 throw new Exception("LOJISTAS cant make transfer");
 
-            if (senderId.Carteira < createTransacaoDto.QuantiaTransferida || senderId.Carteira <= 0)
+            if (sender.Carteira < createTransacaoDto.QuantiaTransferida || sender.Carteira <= 0)
                 throw new Exception("Sender has less then the quantity to complete the transfer");
 
-            senderId.Carteira -= createTransacaoDto.QuantiaTransferida;
+            sender.Carteira -= createTransacaoDto.QuantiaTransferida;
             receiverId.Carteira += createTransacaoDto.QuantiaTransferida;
 
+            await _usuarioRepository.UpdateAsync(sender);
+            await _usuarioRepository.UpdateAsync(receiverId);
+
             var transacaoCreateCommand = _mapper.Map<CreateTransacaoDto, TransacaoCreateCommand>(createTransacaoDto);
-            
-            await _mediator.Send(transacaoCreateCommand);
+            transacaoCreateCommand.IdSender = idSender;
+
+            try
+            {
+                await _mediator.Send(transacaoCreateCommand);
+            }
+            catch (DbUpdateException ex)
+            {
+                Console.WriteLine(ex.InnerException!.Message);
+                throw;
+            }
         }
 
         public async Task<DetailTransacaoDto> GetTransacaoByIdAsync(long? id)

@@ -41,8 +41,11 @@ namespace DesafioBackEnd.API.Application.Service
 
             var loginResult = await _signInManager.CheckPasswordSignInAsync(user, password, false);
 
+            Console.WriteLine(user);
+            Console.WriteLine(password);
+
             if (!loginResult.Succeeded)
-                throw new BadRequestException("Usuário ou senha inválidos");
+                throw new BadRequestException("Usuário ou senha inválidos aqui");
             
             return await GenerateTokenAsync(user);
         }

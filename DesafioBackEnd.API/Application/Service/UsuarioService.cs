@@ -30,13 +30,17 @@ namespace DesafioBackEnd.API.Application.Service
         {
             var usuarioCreateCommand = _mapper.Map<CreateUsuarioDto, UsuarioCreateCommand>(createUsuarioDto);
             await _mediator.Send(usuarioCreateCommand);
-            var register = _authenticate.RegisterUser(createUsuarioDto.Email, createUsuarioDto.Senha);
 
             var user = new ApplicationUser
             {
                 UserName = createUsuarioDto.Email,
                 Email = createUsuarioDto.Email
             };
+
+            var result = await _userManager.CreateAsync(user, createUsuarioDto.Senha);
+
+            if (!result.Succeeded)
+                throw new Exception(string.Join($"{result.Errors.Select(e => e.Description)}, "));
 
             await _userManager.AddToRoleAsync(user, createUsuarioDto.Role.ToString());
         }
