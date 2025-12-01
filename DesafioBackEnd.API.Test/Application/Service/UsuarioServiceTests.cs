@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DesafioBackEnd.API.Application.Command.Queries;
 using DesafioBackEnd.API.Application.Command.Usuarios;
 using DesafioBackEnd.API.Application.Dto.Usuarios;
 using DesafioBackEnd.API.Application.Service;
@@ -57,7 +58,7 @@ namespace DesafioBackEnd.API.Test.Application.Service
             var mockAuthenticate = new Mock<IAuthenticate>();
             var store = new Mock<IUserStore<ApplicationUser>>();
             var mockUserManager = new Mock<UserManager<ApplicationUser>>(
-                store.Object, null, null, null, null, null, null, null, null
+                store.Object, null!, null!, null!, null!, null!, null!, null!, null!
             );
 
             var usuarioDto = new DetailUsuarioDto
@@ -85,6 +86,72 @@ namespace DesafioBackEnd.API.Test.Application.Service
             // Assert
             mockMediator.Verify(m => m.Send(It.IsAny<UsuarioDeleteCommand>(), default), Times.Once);
         }
+
+
+        [Fact(DisplayName = "Return list of users")]
+        public async Task ReturnUsuarios_WithNoError_ResultList()
+        {
+            // Arrange
+            var mockMediator = new Mock<IMediator>();
+            var mockMapper = new Mock<IMapper>();
+            var mockAuthenticate = new Mock<IAuthenticate>();
+            var store = new Mock<IUserStore<ApplicationUser>>();
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(
+                store.Object, null!, null!, null!, null!, null!, null!, null!, null!
+            );
+
+            var users = new List<DetailUsuarioDto>();
+
+            var usuario1 = new DetailUsuarioDto
+            {
+                Id = 1,
+                NomeCompleto = "Teste",
+                Cpf = "12345678901",
+                Email = "teste@teste.com",
+                Senha = "@Jaqrafa@2206@#%",
+                Tipo = UserType.COMUM,
+                Role = UserRole.User,
+                Carteira = 1000,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsActive = true
+            };
+
+            var usuario2 = new DetailUsuarioDto
+            {
+                Id = 2,
+                NomeCompleto = "Teste",
+                Cpf = "12345678901",
+                Email = "teste@teste.com",
+                Senha = "@Jaqrafa@2236@#%",
+                Tipo = UserType.COMUM,
+                Role = UserRole.User,
+                Carteira = 1400,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsActive = true
+            };
+
+            users.Add(usuario1);
+            users.Add(usuario2);
+            
+            mockMediator.Setup(m => m.Send(It.IsAny<GetUsuariosQuery>(), default))
+                        .ReturnsAsync(users);
+
+            mockMapper.Setup(m => m.Map<IEnumerable<DetailUsuarioDto>>(users))
+                      .Returns(users.ToList);
+
+            var service = new UsuarioService(mockMapper.Object, mockMediator.Object, mockAuthenticate.Object, mockUserManager.Object);
+
+            // Act
+            var result = await service.GetUsuariosAsync(null, null, null, null, null, null, 1, 10);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Count());
+            mockMediator.Verify(m => m.Send(It.IsAny<GetUsuariosQuery>(), default), Times.Once);
+        }
+
 
     }
 

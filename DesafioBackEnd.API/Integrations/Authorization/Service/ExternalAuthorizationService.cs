@@ -19,7 +19,7 @@ namespace DesafioBackEnd.API.Integrations.Authorization.Service
 
             var autorizacaoTrue = System.Text.Json.JsonSerializer.Deserialize<AuthorizationResponse>(autorizacao);
 
-            if (autorizacaoTrue.data.authorization == false)
+            if (autorizacaoTrue!.data!.authorization == false)
                 throw new Exception("Denied transaction");
 
             return autorizacaoTrue.data.authorization;
