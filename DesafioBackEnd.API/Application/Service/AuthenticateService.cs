@@ -87,7 +87,7 @@ namespace DesafioBackEnd.API.Application.Service
 
             var usuario = await _dbContext.Usuarios
                 .FirstOrDefaultAsync(u => u.Email == user.Email);
-            claims = claims.Append(new Claim("UserId", usuario.Id.ToString()));
+            claims = claims.Append(new Claim("UserId", usuario!.Id.ToString()));
 
 
             foreach (var role in roles)

@@ -136,7 +136,7 @@ namespace DesafioBackEnd.API.Controllers
         public async Task<ActionResult<DetailUsuarioDto>> DeleteUsuario(long? id)
         {
             var usuario = await _usuarioService.GetByIdAsync(id);
-            if (usuario == null)
+            if (usuario == null!)
                 throw new NotFoundException($"User with id {id} not found.");
 
             usuario.IsActive = false;
