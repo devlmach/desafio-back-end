@@ -36,7 +36,7 @@ namespace DesafioBackEnd.API.IoC
                     // fazer validação
                     ValidIssuer = configuration["Jwt:Issuer"],
                     ValidAudience = configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!)),
                     RoleClaimType = ClaimTypes.Role,
                     ClockSkew = TimeSpan.Zero
                 };

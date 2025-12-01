@@ -1,9 +1,7 @@
 ﻿using DesafioBackEnd.API.Application.Dto.Model;
 using DesafioBackEnd.API.Data.Context;
 using DesafioBackEnd.API.Domain.Account.Interface;
-using DesafioBackEnd.API.Domain.Entity;
 using DesafioBackEnd.API.Domain.Errors;
-using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

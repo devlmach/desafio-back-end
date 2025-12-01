@@ -40,7 +40,6 @@ namespace DesafioBackEnd.API.Controllers
         {
             var user = Request.HttpContext.User.Claims
                 .First(f => f.Type == ClaimTypes.UserData);
-            user = Request.HttpContext.User.Claims.Last(f => f.Type == ClaimTypes.UserData);
 
             Console.WriteLine(user);
             return Ok(System.Text.Json.JsonSerializer.Deserialize<UserLoginData>(user.Value));
