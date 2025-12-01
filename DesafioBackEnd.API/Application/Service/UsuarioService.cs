@@ -47,7 +47,7 @@ namespace DesafioBackEnd.API.Application.Service
 
         public async Task DeleteAsync(long? id)
         {
-            var productDeleteCommand = new UsuarioDeleteCommand(id.Value);
+            var productDeleteCommand = new UsuarioDeleteCommand(id!.Value);
             if (productDeleteCommand == null)
                 throw new Exception($"Entity could not be found");
 

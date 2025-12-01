@@ -47,5 +47,45 @@ namespace DesafioBackEnd.API.Test.Application.Service
             mockUserManager.Verify(u => u.CreateAsync(It.IsAny<ApplicationUser>(), newUsuario.Senha), Times.Once);
             mockUserManager.Verify(u => u.AddToRoleAsync(It.IsAny<ApplicationUser>(), newUsuario.Role.ToString()), Times.Once);
         }
+
+        [Fact(DisplayName = "Delete user with IsActive equals false")]
+        public async Task DeleteUsuario_WithNoError_ResultCreated()
+        {
+            // Arrange
+            var mockMediator = new Mock<IMediator>();
+            var mockMapper = new Mock<IMapper>();
+            var mockAuthenticate = new Mock<IAuthenticate>();
+            var store = new Mock<IUserStore<ApplicationUser>>();
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(
+                store.Object, null, null, null, null, null, null, null, null
+            );
+
+            var usuarioDto = new DetailUsuarioDto
+            {
+                Id = 1,
+                NomeCompleto = "Teste",
+                Cpf = "12345678901",
+                Email = "teste@teste.com",
+                Senha = "@Jaqrafa@2206@#%",
+                Tipo = UserType.COMUM,
+                Role = UserRole.User,
+                Carteira = 1000,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsActive = true
+            };
+
+            mockMediator.Setup(m => m.Send(It.IsAny<UsuarioDeleteCommand>(), default)).ReturnsAsync(new Usuario());
+
+            var service = new UsuarioService(mockMapper.Object, mockMediator.Object, mockAuthenticate.Object, mockUserManager.Object);
+
+            // Act
+            await service.DeleteAsync(1);
+
+            // Assert
+            mockMediator.Verify(m => m.Send(It.IsAny<UsuarioDeleteCommand>(), default), Times.Once);
+        }
+
     }
+
 }
