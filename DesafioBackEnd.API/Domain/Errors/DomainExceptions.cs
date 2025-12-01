@@ -19,4 +19,9 @@
     {
         public ForbiddenException(string messase) : base(messase) { }
     }
+
+    public class NullException : DomainExceptions
+    {
+        public NullException(string message) : base (message) { }
+    }
 }

@@ -6,6 +6,7 @@ using DesafioBackEnd.API.Application.Service;
 using DesafioBackEnd.API.Data.Context;
 using DesafioBackEnd.API.Domain.Account.Interface;
 using DesafioBackEnd.API.Domain.Entity;
+using DesafioBackEnd.API.Domain.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Moq;
@@ -24,7 +25,7 @@ namespace DesafioBackEnd.API.Test.Application.Service
 
             //mock do usermanager
             var store = new Mock<IUserStore<ApplicationUser>>();
-            var mockUserManager = new Mock<UserManager<ApplicationUser>>(store.Object, null, null, null, null, null, null, null, null);
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(store.Object, null!, null!, null!, null!, null!, null!, null!, null!);
 
             mockMapper.Setup(m => m.Map<CreateUsuarioDto, UsuarioCreateCommand>(It.IsAny<CreateUsuarioDto>())).Returns(new UsuarioCreateCommand());
             mockMediator.Setup(m => m.Send(It.IsAny<IRequest<Usuario>>(), default)).ReturnsAsync(new Usuario());
@@ -151,6 +152,116 @@ namespace DesafioBackEnd.API.Test.Application.Service
             Assert.Equal(2, result.Count());
             mockMediator.Verify(m => m.Send(It.IsAny<GetUsuariosQuery>(), default), Times.Once);
         }
+
+        [Fact(DisplayName = "Get usuario by id")]
+        public async Task GetUsuarioByIdAsync_DeveRetornarUsuarioCorreto()
+        {
+            var mockMapper = new Mock<IMapper>();
+            var mockMediator = new Mock<IMediator>();
+            var mockAuthenticate = new Mock<IAuthenticate>();
+            var store = new Mock<IUserStore<ApplicationUser>>();
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(store.Object, null!, null!, null!, null!, null!, null!, null!, null!);
+
+            var service = new UsuarioService(mockMapper.Object, mockMediator.Object, mockAuthenticate.Object, mockUserManager.Object);
+
+            // Arrange
+            var usuario = new Usuario
+            {
+                Id = 1,
+                NomeCompleto = "Teste",
+                Cpf = "12345678901",
+                Email = "teste@teste.com",
+                Tipo = UserType.COMUM,
+                Role = UserRole.User,
+                Carteira = 1000,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsActive = true
+            };
+
+            var usuarioDto = new DetailUsuarioDto
+            {
+                Id = 1,
+                NomeCompleto = "Teste",
+                Cpf = "12345678901",
+                Email = "teste@teste.com",
+                Tipo = UserType.COMUM,
+                Role = UserRole.User,
+                Carteira = 1000,
+                CreatedAt = usuario.CreatedAt,
+                UpdatedAt = usuario.UpdatedAt,
+                IsActive = true
+            };
+
+            mockMediator
+                .Setup(m => m.Send(It.Is<GetUsuarioByIdQuery>(q => q.Id == 1), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(usuario);
+
+            mockMapper
+                .Setup(m => m.Map<DetailUsuarioDto>(usuario))
+                .Returns(usuarioDto);
+
+            // Act
+            var result = await service.GetByIdAsync(1);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(1, result.Id);
+            Assert.Equal("Teste", result.NomeCompleto);
+        }
+
+        [Fact(DisplayName = "Get usuario by id not found")]
+        public async Task GetUsuarioByIdAsync_DeveRetornarNotFound_QuandoUsuarioNaoExiste()
+        {
+            var mockMapper = new Mock<IMapper>();
+            var mockMediator = new Mock<IMediator>();
+            var mockAuthenticate = new Mock<IAuthenticate>();
+            var store = new Mock<IUserStore<ApplicationUser>>();
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(store.Object, null!, null!, null!, null!, null!, null!, null!, null!);
+
+            var service = new UsuarioService(mockMapper.Object, mockMediator.Object, mockAuthenticate.Object, mockUserManager.Object);
+
+            var usuario = new Usuario
+            {
+                Id = 1,
+                NomeCompleto = "Teste",
+                Cpf = "12345678901",
+                Email = "teste@teste.com",
+                Tipo = UserType.COMUM,
+                Role = UserRole.User,
+                Carteira = 1000,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsActive = true
+            };
+
+            var usuarioDto = new DetailUsuarioDto
+            {
+                Id = 1,
+                NomeCompleto = "Teste",
+                Cpf = "12345678901",
+                Email = "teste@teste.com",
+                Tipo = UserType.COMUM,
+                Role = UserRole.User,
+                Carteira = 1000,
+                CreatedAt = usuario.CreatedAt,
+                UpdatedAt = usuario.UpdatedAt,
+                IsActive = true
+            };
+
+            // Arrange
+            long id = 99;
+            mockMediator
+                .Setup(m => m.Send(It.Is<GetUsuarioByIdQuery>(q => q.Id == id), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((Usuario)null!); // simulando usuário inexistente
+
+            // Act
+            var result = await service.GetByIdAsync(id);
+            Assert.Null(result);
+
+        }
+
+
 
 
     }

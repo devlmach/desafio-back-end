@@ -6,6 +6,7 @@ using DesafioBackEnd.API.Application.Service.Interfaces;
 using DesafioBackEnd.API.Data.Context;
 using DesafioBackEnd.API.Domain.Account.Interface;
 using DesafioBackEnd.API.Domain.Entity;
+using DesafioBackEnd.API.Domain.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
@@ -49,16 +50,16 @@ namespace DesafioBackEnd.API.Application.Service
         {
             var productDeleteCommand = new UsuarioDeleteCommand(id!.Value);
             if (productDeleteCommand == null)
-                throw new Exception($"Entity could not be found");
+                throw new NullException($"Entity could not be found");
 
             await _mediator.Send(productDeleteCommand);
         }
 
         public async Task<DetailUsuarioDto> GetByIdAsync(long? id)
         {
-            var usuario = new GetUsuarioByIdQuery(id.Value);
+            var usuario = new GetUsuarioByIdQuery(id!.Value);
             if (usuario == null)
-                throw new Exception($"Entity could not be found");
+                throw new NullException($"Entity could not be found");
 
             var result = await _mediator.Send(usuario);
             return _mapper.Map<DetailUsuarioDto>(result);
