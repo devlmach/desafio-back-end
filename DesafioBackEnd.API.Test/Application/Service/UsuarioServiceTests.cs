@@ -6,11 +6,9 @@ using DesafioBackEnd.API.Application.Service;
 using DesafioBackEnd.API.Data.Context;
 using DesafioBackEnd.API.Domain.Account.Interface;
 using DesafioBackEnd.API.Domain.Entity;
-using DesafioBackEnd.API.Domain.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Moq;
-using System.Threading.Tasks;
 
 namespace DesafioBackEnd.API.Test.Application.Service
 {

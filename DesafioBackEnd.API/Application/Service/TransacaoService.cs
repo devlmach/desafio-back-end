@@ -5,6 +5,7 @@ using DesafioBackEnd.API.Application.Dto.Transacoes;
 using DesafioBackEnd.API.Application.Service.Interfaces;
 using DesafioBackEnd.API.Data.Repository.Interfaces;
 using DesafioBackEnd.API.Domain.Entity;
+using DesafioBackEnd.API.Domain.Errors;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -37,16 +38,16 @@ namespace DesafioBackEnd.API.Application.Service
             var receiverId = await _usuarioRepository.GetByIdAsync(createTransacaoDto.IdReceiver);
 
             if (sender == null || sender.IsActive == false)
-                throw new Exception("Sender user cannot be found.");
+                throw new BadRequestException("Sender user cannot be found.");
 
             if (receiverId == null || receiverId.IsActive == false)
-                throw new Exception("Receiver user cannot be found.");
+                throw new BadRequestException("Receiver user cannot be found.");
 
             if (sender.Tipo == UserType.LOJISTA)
-                throw new Exception("LOJISTAS cant make transfer");
+                throw new BadRequestException("LOJISTAS cant make transfer");
 
             if (sender.Carteira < createTransacaoDto.QuantiaTransferida || sender.Carteira <= 0)
-                throw new Exception("Sender has less then the quantity to complete the transfer");
+                throw new BadRequestException("Sender has less then the quantity to complete the transfer");
 
             sender.Carteira -= createTransacaoDto.QuantiaTransferida;
             receiverId.Carteira += createTransacaoDto.QuantiaTransferida;
@@ -70,7 +71,7 @@ namespace DesafioBackEnd.API.Application.Service
 
         public async Task<DetailTransacaoDto> GetTransacaoByIdAsync(long? id)
         {
-            var transacao = new GetTransacaoByIdQuery(id.Value);
+            var transacao = new GetTransacaoByIdQuery(id!.Value);
             if (transacao == null)
                 throw new Exception($"Entity could not be found");
 
