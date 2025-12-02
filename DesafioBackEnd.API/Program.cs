@@ -1,10 +1,12 @@
 using DesafioBackEnd.API.Application.Mapping;
 using DesafioBackEnd.API.Common.Middleware;
+using DesafioBackEnd.API.Data.Context;
 using DesafioBackEnd.API.Domain.Account.Interface;
 using DesafioBackEnd.API.Integrations.Authorization.Interface;
 using DesafioBackEnd.API.Integrations.Authorization.Service;
 using DesafioBackEnd.API.IoC;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 
@@ -92,6 +94,9 @@ using (var serviceScope = app.Services.CreateScope())
     var seedUserRoleInitial = services.GetRequiredService<ISeedUserRoleInitial>();
     seedUserRoleInitial.SeedRoles();
     seedUserRoleInitial.SeedUsers();
+
+    var db = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
 }
 
 // Configure the HTTP request pipeline.
