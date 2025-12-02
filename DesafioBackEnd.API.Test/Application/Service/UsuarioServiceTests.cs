@@ -10,6 +10,7 @@ using DesafioBackEnd.API.Domain.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Moq;
+using System.Threading.Tasks;
 
 namespace DesafioBackEnd.API.Test.Application.Service
 {
@@ -261,8 +262,79 @@ namespace DesafioBackEnd.API.Test.Application.Service
 
         }
 
+        [Fact(DisplayName = "Update usuario")]
+        public async Task UpdateUsuario_ValidValues_ReturnNoError()
+        {
+            var mockMapper = new Mock<IMapper>();
+            var mockMediator = new Mock<IMediator>();
+            var mockAuthenticate = new Mock<IAuthenticate>();
+            var store = new Mock<IUserStore<ApplicationUser>>();
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(store.Object, null!, null!, null!, null!, null!, null!, null!, null!);
 
+            var usuarioService = new UsuarioService(mockMapper.Object, mockMediator.Object, mockAuthenticate.Object, mockUserManager.Object);
 
+            var usuario = new Usuario
+            {
+                Id = 1,
+                NomeCompleto = "Teste",
+                Cpf = "12345678901",
+                Email = "teste@teste.com",
+                Tipo = UserType.COMUM,
+                Role = UserRole.User,
+                Carteira = 1000,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsActive = true
+            };
+
+            var usuarioDto = new DetailUsuarioDto
+            {
+                Id = usuario.Id,
+                NomeCompleto = usuario.NomeCompleto,
+                Cpf = usuario.Cpf,
+                Email = usuario.Email,
+                Tipo = usuario.Tipo,
+                Role = usuario.Role,
+                Carteira = usuario.Carteira,
+                CreatedAt = usuario.CreatedAt,
+                UpdatedAt = usuario.UpdatedAt,
+                IsActive = usuario.IsActive
+            };
+
+            var usuarioUpdateDto = new UpdateUsuarioDto
+            {
+                Id = usuario.Id,
+                NomeCompleto = "Teste novo nome",
+                Email = "testeemailnovo@teste.com",
+                Tipo = UserType.COMUM,
+                Role = UserRole.User,
+                Carteira = 1000,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsActive = true
+            };
+
+            var usuarioUpdateCommand = new UsuarioUpdateCommand(usuarioUpdateDto.Id)
+            {
+                Id = usuarioUpdateDto.Id,
+                NomeCompleto = usuarioUpdateDto.NomeCompleto,
+                Email = usuarioUpdateDto.Email,
+                Tipo = usuarioUpdateDto.Tipo,
+                Role = usuarioUpdateDto.Role,
+                Carteira = usuarioUpdateDto.Carteira,
+                CreatedAt = usuarioUpdateDto.CreatedAt,
+                UpdatedAt = usuarioUpdateDto.UpdatedAt,
+                IsActive = usuarioUpdateDto.IsActive
+            };
+
+            mockMapper.Setup(m => m.Map<UpdateUsuarioDto, UsuarioUpdateCommand>(usuarioUpdateDto)).Returns(usuarioUpdateCommand);
+            mockMediator.Setup(m => m.Send(usuarioUpdateCommand, default)).ReturnsAsync(new Usuario());
+
+            await usuarioService.UpdateAsync(usuarioUpdateDto);
+
+            mockMapper.Verify(m => m.Map<UpdateUsuarioDto, UsuarioUpdateCommand>(usuarioUpdateDto), Times.Once);
+            mockMediator.Verify(m => m.Send(It.Is<UsuarioUpdateCommand>(cmd => cmd.Id == usuarioUpdateDto.Id), default), Times.Once);
+        }
 
     }
 
