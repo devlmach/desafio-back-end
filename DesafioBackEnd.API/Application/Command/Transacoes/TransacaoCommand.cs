@@ -7,7 +7,7 @@ namespace DesafioBackEnd.API.Application.Command.Transacoes
     {
         public long? IdSender { get; set; }
         public long? IdReceiver { get; set; }
-        public decimal QuantiaTransferida { get; set; }
+        public decimal? QuantiaTransferida { get; set; }
         public required DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

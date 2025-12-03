@@ -1,6 +1,5 @@
 ﻿using DesafioBackEnd.API.Application.Dto.Usuarios;
 using DesafioBackEnd.API.Domain.Entity;
-using DesafioBackEnd.API.Domain.Errors;
 using FluentAssertions;
 using System.ComponentModel.DataAnnotations;
 

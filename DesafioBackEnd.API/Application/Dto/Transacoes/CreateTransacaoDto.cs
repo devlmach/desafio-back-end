@@ -11,6 +11,6 @@ namespace DesafioBackEnd.API.Application.Dto.Transacoes
         public long? IdReceiver { get; set; }
 
         [Required(ErrorMessage = "O valor a ser transferido não pode ser vazio")]
-        public decimal QuantiaTransferida { get; set; }
+        public decimal? QuantiaTransferida { get; set; }
     }
 }

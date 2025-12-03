@@ -49,8 +49,8 @@ namespace DesafioBackEnd.API.Application.Service
             if (sender.Carteira < createTransacaoDto.QuantiaTransferida || sender.Carteira <= 0)
                 throw new BadRequestException("Sender has less then the quantity to complete the transfer");
 
-            sender.Carteira -= createTransacaoDto.QuantiaTransferida;
-            receiverId.Carteira += createTransacaoDto.QuantiaTransferida;
+            sender.Carteira -= (decimal)createTransacaoDto.QuantiaTransferida!;
+            receiverId.Carteira += (decimal)createTransacaoDto.QuantiaTransferida!;
 
             await _usuarioRepository.UpdateAsync(sender);
             await _usuarioRepository.UpdateAsync(receiverId);
