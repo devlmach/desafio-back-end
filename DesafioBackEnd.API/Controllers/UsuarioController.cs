@@ -32,8 +32,8 @@ namespace DesafioBackEnd.API.Controllers
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<CreateUsuarioDto>> CreateUsuario([FromBody] CreateUsuarioDto usuario)
         {
-            if (usuario == null)
-                throw new BadRequestException("Invalid data.");
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             await _usuarioService.AddAsync(usuario);
             return Ok(usuario);

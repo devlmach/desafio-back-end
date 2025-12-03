@@ -53,9 +53,8 @@ namespace DesafioBackEnd.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         /// <exception cref="NotFoundException"></exception>
-        [ProducesResponseType(typeof(DetailTransacaoDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(DetailTransacaoDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<DetailTransacaoDto>> GetById(long? id)
@@ -81,6 +80,8 @@ namespace DesafioBackEnd.API.Controllers
         /// Endpoint para retornar todas as transações de acordo com usuário autorizado
         /// </summary>
         /// <returns></returns>
+        [ProducesResponseType(typeof(DetailTransacaoDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
         [HttpGet]
         [Authorize(Roles = "Admin, User")]
         public async Task<ActionResult<IEnumerable<DetailTransacaoDto>>> GetAllTransacoes([FromQuery] QueryTransacaoParameter queryParameter)
