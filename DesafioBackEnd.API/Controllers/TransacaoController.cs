@@ -1,6 +1,7 @@
 ﻿using DesafioBackEnd.API.Application.Command.Queries;
 using DesafioBackEnd.API.Application.Dto.Transacoes;
 using DesafioBackEnd.API.Application.Service.Interfaces;
+using DesafioBackEnd.API.Common.Middleware;
 using DesafioBackEnd.API.Domain.Entity;
 using DesafioBackEnd.API.Domain.Errors;
 using DesafioBackEnd.API.Integrations.Authorization.Interface;
@@ -29,6 +30,8 @@ namespace DesafioBackEnd.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Authorize]
+        [ProducesResponseType(typeof(DetailTransacaoDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         [Route("/transfer")]
         public async Task<ActionResult> CreateTransaction([FromBody] CreateTransacaoDto transacao)
         {
@@ -50,6 +53,9 @@ namespace DesafioBackEnd.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         /// <exception cref="NotFoundException"></exception>
+        [ProducesResponseType(typeof(DetailTransacaoDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<DetailTransacaoDto>> GetById(long? id)
@@ -61,7 +67,7 @@ namespace DesafioBackEnd.API.Controllers
             if(User.IsInRole(UserRole.User.ToString()))
                 if (transacao == null || transacao.IdSender != user.Id && transacao.IdReceiver != user.Id)
                 {
-                    throw new NotFoundException($"User typerole user cannot see other users transactions.");
+                    throw new BadRequestException($"User typerole user cannot see other users transactions.");
                 }
                 else
                 {
