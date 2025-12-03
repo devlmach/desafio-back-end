@@ -49,6 +49,9 @@ namespace DesafioBackEnd.API.Application.Service
             if (sender.Carteira < createTransacaoDto.QuantiaTransferida || sender.Carteira <= 0)
                 throw new BadRequestException("Sender has less then the quantity to complete the transfer");
 
+            if (createTransacaoDto.QuantiaTransferida < 0)
+                throw new BadRequestException("The money you wanna send cannot be lower then 0");
+
             sender.Carteira -= (decimal)createTransacaoDto.QuantiaTransferida!;
             receiverId.Carteira += (decimal)createTransacaoDto.QuantiaTransferida!;
 
