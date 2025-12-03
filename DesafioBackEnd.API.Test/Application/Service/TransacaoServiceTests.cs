@@ -370,5 +370,76 @@ namespace DesafioBackEnd.API.Test.Application.Service
 
             Assert.Equal("Receiver user cannot be found.", ex.Message);
         }
+
+        [Fact(DisplayName = "Create transaction with balance lower than 0")]
+        public async Task CreateTransacao_InvalidBalance_ReturnBadRequest()
+        {
+            var mockMediator = new Mock<IMediator>();
+            var mockMapper = new Mock<IMapper>();
+            var mockUsuarioRepository = new Mock<IUsuarioRepository>();
+            var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
+            var mockTransacaoRepository = new Mock<ITransacaoRepository>();
+
+            var service = new TransacaoService(mockMapper.Object, mockMediator.Object, mockUsuarioRepository.Object, mockHttpContextAccessor.Object, mockTransacaoRepository.Object);
+
+            var httpContext = new DefaultHttpContext
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(
+                [
+                    new Claim("UserId", "1")
+                ]))
+            };
+
+            mockHttpContextAccessor.Setup(m => m.HttpContext).Returns(httpContext);
+
+            var sender = new Usuario
+            {
+                Id = 1,
+                Carteira = 100,
+                Tipo = UserType.COMUM,
+                Role = UserRole.User,
+                IsActive = true,
+            };
+
+            var receiver = new Usuario
+            {
+                Id = 2,
+                Carteira = 100,
+                Tipo = UserType.COMUM,
+                Role = UserRole.User,
+                IsActive = true,
+            };
+
+            mockUsuarioRepository.Setup(m => m.GetByIdAsync(sender.Id)).ReturnsAsync(sender);
+            mockUsuarioRepository.Setup(m => m.GetByIdAsync(receiver.Id)).ReturnsAsync(receiver);
+
+            var newTransacao = new CreateTransacaoDto
+            {
+                IdReceiver = receiver.Id,
+                QuantiaTransferida = -1
+            };
+
+            var command = new TransacaoCreateCommand
+            {
+                IdSender = sender.Id,
+                IdReceiver = receiver.Id,
+                QuantiaTransferida = newTransacao.QuantiaTransferida,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            mockMapper.Setup(m => m.Map<CreateTransacaoDto, TransacaoCreateCommand>(newTransacao)).Returns(command);
+            mockMediator.Setup(m => m.Send(command, default)).ReturnsAsync(new Transacao
+            {
+                IdReceiver = command.IdReceiver,
+                QuantiaTransferida = command.QuantiaTransferida,
+                CreatedAt = command.CreatedAt
+            });
+
+            var ex = await Assert.ThrowsAsync<BadRequestException>(() =>
+                service.CreateTransacaoAsync(newTransacao)
+            );
+
+            Assert.Equal("The money you wanna send cannot be lower then 0", ex.Message);
+        }
     }
 }
