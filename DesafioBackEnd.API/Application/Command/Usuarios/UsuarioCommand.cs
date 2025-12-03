@@ -6,13 +6,13 @@ namespace DesafioBackEnd.API.Application.Command.Usuarios
 
     public abstract class UsuarioCommand : IRequest<Usuario>
     {
-        public string NomeCompleto { get; set; }
+        public string? NomeCompleto { get; set; }
 
-        public string Cpf { get; set; }
+        public string? Cpf { get; set; }
 
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
-        public string Senha { get; set; }
+        public string? Senha { get; set; }
 
         public UserType Tipo { get; set; }
 

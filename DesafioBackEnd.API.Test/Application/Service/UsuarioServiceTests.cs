@@ -46,7 +46,7 @@ namespace DesafioBackEnd.API.Test.Application.Service
             await service.AddAsync(newUsuario);
             mockMediator.Verify(m => m.Send(It.IsAny<IRequest<Usuario>>(), default), Times.Once());
             mockUserManager.Verify(u => u.CreateAsync(It.IsAny<ApplicationUser>(), newUsuario.Senha), Times.Once);
-            mockUserManager.Verify(u => u.AddToRoleAsync(It.IsAny<ApplicationUser>(), newUsuario.Role.ToString()), Times.Once);
+            mockUserManager.Verify(u => u.AddToRoleAsync(It.IsAny<ApplicationUser>(), newUsuario.Role.ToString()!), Times.Once);
         }
 
         [Fact(DisplayName = "Delete user with IsActive equals false")]
