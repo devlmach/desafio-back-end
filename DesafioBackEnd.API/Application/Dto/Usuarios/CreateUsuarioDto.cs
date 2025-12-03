@@ -15,11 +15,13 @@ namespace DesafioBackEnd.API.Application.Dto.Usuarios
         [Required(ErrorMessage = "O campo {0} não pode ser nulo")]
         public required string Email { get; set; }
 
+        [Required(ErrorMessage = "Insira uma senha")]
         public required string Senha { get; set; }
 
         [Required(ErrorMessage = "O tipo do usuário não pode ser nulo")]
-        public required UserType Tipo { get; set; }
+        public required UserType? Tipo { get; set; }
 
-        public required UserRole Role { get; set; } = UserRole.User;
+        [Required(ErrorMessage = "Insira uma função para o usuário")]
+        public required UserRole? Role { get; set; }
     }
 }
