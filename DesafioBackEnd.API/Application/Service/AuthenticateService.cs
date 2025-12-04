@@ -72,7 +72,7 @@ namespace DesafioBackEnd.API.Application.Service
         private async Task<UserToken> GenerateTokenAsync(ApplicationUser user)
         {
             var roles = await _userManager.GetRolesAsync(user);
-            var userData = new UserLoginData { Id = user.Id, Roles = roles };
+            var userData = new UserLoginData { Id = user.Id, Roles = roles, Email = user.Email! };
             var userDataJson = System.Text.Json.JsonSerializer.Serialize(userData);
 
             IEnumerable<Claim> claims =
@@ -86,7 +86,6 @@ namespace DesafioBackEnd.API.Application.Service
             var usuario = await _dbContext.Usuarios
                 .FirstOrDefaultAsync(u => u.Email == user.Email);
             claims = claims.Append(new Claim("UserId", usuario!.Id.ToString()));
-
 
             foreach (var role in roles)
             {
