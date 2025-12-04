@@ -30,9 +30,9 @@ namespace DesafioBackEnd.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Authorize]
-        [ProducesResponseType(typeof(DetailTransacaoDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(DetailTransacaoDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
-        [Route("/transfer")]
+        [Route("transfer")]
         public async Task<ActionResult> CreateTransaction([FromBody] CreateTransacaoDto transacao)
         {
             if (transacao == null)
@@ -59,19 +59,21 @@ namespace DesafioBackEnd.API.Controllers
         [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<DetailTransacaoDto>> GetById(long? id)
         {
-            var user = TokenController.GetUser(Request);
+            var userId = User.FindFirst("UserId")!.Value;
         
             var transacao = await _transacaoService.GetTransacaoByIdAsync(id);
 
-            if(User.IsInRole(UserRole.User.ToString()))
-                if (transacao == null || transacao.IdSender != user.Id && transacao.IdReceiver != user.Id)
+            if (User.IsInRole(UserRole.User.ToString()))
+            {
+                if (transacao == null || transacao.IdSender != long.Parse(userId) && transacao.IdReceiver != long.Parse(userId))
                 {
-                    throw new BadRequestException($"User typerole user cannot see other users transactions.");
+                    throw new BadRequestException("User typerole user cannot see other users transactions.");
                 }
                 else
                 {
                     return Ok(transacao);
                 }
+            }
 
             return Ok(transacao);  
         }
