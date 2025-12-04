@@ -20,7 +20,6 @@ namespace DesafioBackEnd.API.Test.Application.Service
             //arrange
             var mockMapper = new Mock<IMapper>();
             var mockMediator = new Mock<IMediator>();
-            var mockAuthenticate = new Mock<IAuthenticate>();
 
             //mock do usermanager
             var store = new Mock<IUserStore<ApplicationUser>>();
@@ -31,7 +30,7 @@ namespace DesafioBackEnd.API.Test.Application.Service
             mockUserManager.Setup(u => u.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
             mockUserManager.Setup(u => u.AddToRoleAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
 
-            var service = new UsuarioService(mockMapper.Object, mockMediator.Object, mockAuthenticate.Object, mockUserManager.Object);
+            var service = new UsuarioService(mockMapper.Object, mockMediator.Object, mockUserManager.Object);
 
             var newUsuario = new CreateUsuarioDto
             {
@@ -55,8 +54,8 @@ namespace DesafioBackEnd.API.Test.Application.Service
             // Arrange
             var mockMediator = new Mock<IMediator>();
             var mockMapper = new Mock<IMapper>();
-            var mockAuthenticate = new Mock<IAuthenticate>();
-            var store = new Mock<IUserStore<ApplicationUser>>();
+            var store = new Mock<IUserStore<ApplicationUser>>();       
+
             var mockUserManager = new Mock<UserManager<ApplicationUser>>(
                 store.Object, null!, null!, null!, null!, null!, null!, null!, null!
             );
@@ -78,7 +77,7 @@ namespace DesafioBackEnd.API.Test.Application.Service
 
             mockMediator.Setup(m => m.Send(It.IsAny<UsuarioDeleteCommand>(), default)).ReturnsAsync(new Usuario());
 
-            var service = new UsuarioService(mockMapper.Object, mockMediator.Object, mockAuthenticate.Object, mockUserManager.Object);
+            var service = new UsuarioService(mockMapper.Object, mockMediator.Object, mockUserManager.Object);
 
             // Act
             await service.DeleteAsync(1);
@@ -94,7 +93,6 @@ namespace DesafioBackEnd.API.Test.Application.Service
             // Arrange
             var mockMediator = new Mock<IMediator>();
             var mockMapper = new Mock<IMapper>();
-            var mockAuthenticate = new Mock<IAuthenticate>();
             var store = new Mock<IUserStore<ApplicationUser>>();
             var mockUserManager = new Mock<UserManager<ApplicationUser>>(
                 store.Object, null!, null!, null!, null!, null!, null!, null!, null!
@@ -141,7 +139,7 @@ namespace DesafioBackEnd.API.Test.Application.Service
             mockMapper.Setup(m => m.Map<IEnumerable<DetailUsuarioDto>>(users))
                       .Returns(users.ToList);
 
-            var service = new UsuarioService(mockMapper.Object, mockMediator.Object, mockAuthenticate.Object, mockUserManager.Object);
+            var service = new UsuarioService(mockMapper.Object, mockMediator.Object, mockUserManager.Object);
 
             // Act
             var result = await service.GetUsuariosAsync(null, null, null, null, null, null, 1, 10);
@@ -157,11 +155,10 @@ namespace DesafioBackEnd.API.Test.Application.Service
         {
             var mockMapper = new Mock<IMapper>();
             var mockMediator = new Mock<IMediator>();
-            var mockAuthenticate = new Mock<IAuthenticate>();
             var store = new Mock<IUserStore<ApplicationUser>>();
             var mockUserManager = new Mock<UserManager<ApplicationUser>>(store.Object, null!, null!, null!, null!, null!, null!, null!, null!);
 
-            var service = new UsuarioService(mockMapper.Object, mockMediator.Object, mockAuthenticate.Object, mockUserManager.Object);
+            var service = new UsuarioService(mockMapper.Object, mockMediator.Object, mockUserManager.Object);
 
             // Arrange
             var usuario = new Usuario
@@ -214,11 +211,10 @@ namespace DesafioBackEnd.API.Test.Application.Service
         {
             var mockMapper = new Mock<IMapper>();
             var mockMediator = new Mock<IMediator>();
-            var mockAuthenticate = new Mock<IAuthenticate>();
             var store = new Mock<IUserStore<ApplicationUser>>();
             var mockUserManager = new Mock<UserManager<ApplicationUser>>(store.Object, null!, null!, null!, null!, null!, null!, null!, null!);
 
-            var service = new UsuarioService(mockMapper.Object, mockMediator.Object, mockAuthenticate.Object, mockUserManager.Object);
+            var service = new UsuarioService(mockMapper.Object, mockMediator.Object, mockUserManager.Object);
 
             var usuario = new Usuario
             {
@@ -265,11 +261,10 @@ namespace DesafioBackEnd.API.Test.Application.Service
         {
             var mockMapper = new Mock<IMapper>();
             var mockMediator = new Mock<IMediator>();
-            var mockAuthenticate = new Mock<IAuthenticate>();
             var store = new Mock<IUserStore<ApplicationUser>>();
             var mockUserManager = new Mock<UserManager<ApplicationUser>>(store.Object, null!, null!, null!, null!, null!, null!, null!, null!);
 
-            var usuarioService = new UsuarioService(mockMapper.Object, mockMediator.Object, mockAuthenticate.Object, mockUserManager.Object);
+            var usuarioService = new UsuarioService(mockMapper.Object, mockMediator.Object, mockUserManager.Object);
 
             var usuario = new Usuario
             {

@@ -87,7 +87,11 @@ namespace DesafioBackEnd.API.Controllers
         [ProducesResponseType(typeof(DetailUsuarioDto), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<DetailUsuarioDto>>> GetAllUsuarios([FromQuery] QueryUsuarioParameter queryParameter)
         {
-            var usuarios = await _usuarioService.GetUsuariosAsync(queryParameter.NomeCompleto, queryParameter.Cpf, queryParameter.Email, queryParameter.Tipo, queryParameter.Role, queryParameter.IsActive, queryParameter.PageNumber,
+            if (User.IsInRole(UserRole.User.ToString()))
+                throw new ForbiddenException("Only Admin has access to this action");
+
+            var usuarios = await _usuarioService.GetUsuariosAsync(queryParameter.NomeCompleto, queryParameter.Cpf, queryParameter.Email, 
+                queryParameter.Tipo, queryParameter.Role, queryParameter.IsActive, queryParameter.PageNumber,
                 queryParameter.PageSize);
 
             return Ok(usuarios);
@@ -101,7 +105,7 @@ namespace DesafioBackEnd.API.Controllers
         /// <returns></returns>
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin, User")]
-        [ProducesResponseType(typeof(UpdateUsuarioDto), StatusCodes.Status202Accepted)]
+        [ProducesResponseType(typeof(UpdateUsuarioDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> UpdateUsuario(long? id, [FromBody] UpdateUsuarioDto updateUsuarioDto)
@@ -136,7 +140,7 @@ namespace DesafioBackEnd.API.Controllers
         public async Task<ActionResult<DetailUsuarioDto>> DeleteUsuario(long? id)
         {
             var usuario = await _usuarioService.GetByIdAsync(id);
-            if (usuario == null!)
+            if (usuario == null)
                 throw new NotFoundException($"User with id {id} not found.");
 
             usuario.IsActive = false;
