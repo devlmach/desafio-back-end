@@ -67,7 +67,7 @@ namespace DesafioBackEnd.API.Controllers
             {
                 if (transacao == null || transacao.IdSender != long.Parse(userId) && transacao.IdReceiver != long.Parse(userId))
                 {
-                    throw new BadRequestException("User typerole user cannot see other users transactions.");
+                    throw new ForbiddenException("User typerole user cannot see other users transactions.");
                 }
                 else
                 {

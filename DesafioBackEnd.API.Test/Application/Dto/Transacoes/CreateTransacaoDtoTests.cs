@@ -2,7 +2,7 @@
 using FluentAssertions;
 using System.ComponentModel.DataAnnotations;
 
-namespace DesafioBackEnd.API.Test.Application.Dto.Transacao
+namespace DesafioBackEnd.API.Test.Application.Dto.Transacoes
 {
     public class CreateTransacaoDtoTests
     {
